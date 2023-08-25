@@ -77,13 +77,13 @@ public partial class TaskTemplateEditor : UserControl
         {
             Width = chatMessagePanel.Width - 20,
             Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right,
+            CanEdit = CanEdit
         };
-
-        chatMessageControl.CanEdit = CanEdit;
-        chatMessageControl.Top = chatMessageIndex * chatMessageControl.Height + chatMessagePanel.AutoScrollPosition.Y;
 
         chatMessageControl.MessageUpdated += ChatMessageControl_MessageUpdated;
         chatMessageControl.MessageDeleted += ChatMessageControl_MessageDeleted;
+
+        chatMessageControl.Top = chatMessageIndex * chatMessageControl.Height + chatMessagePanel.AutoScrollPosition.Y;
 
         chatMessagePanel.Controls.Add(chatMessageControl);
     }

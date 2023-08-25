@@ -21,7 +21,7 @@ public partial class PipeRunnerForm : Form
 
     public ChatBotPipe? Pipe { get; private set; }
 
-    private List<PipeRunnerTaskControl> _pipeRunnerTaskControls = new List<PipeRunnerTaskControl>();
+    private readonly List<PipeRunnerTaskControl> _pipeRunnerTaskControls = new();
 
     public PipeRunnerForm()
     {

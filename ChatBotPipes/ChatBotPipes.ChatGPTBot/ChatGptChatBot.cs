@@ -76,9 +76,6 @@ public class ChatGptChatBot : IChatBot
 
     private async Task SetAuthenticationAsync()
     {
-        var currentUser = await _currentUserService.GetCurrentUserAsync()
-            ?? throw new InvalidOperationException("There is no current user");
-
         var apiKey = await _apiKeyStore.GetApiKeyAsync()
             ?? throw new InvalidOperationException("Current user does not have api key set");
 
