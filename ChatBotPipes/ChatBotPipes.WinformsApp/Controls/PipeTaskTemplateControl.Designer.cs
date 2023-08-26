@@ -33,11 +33,13 @@ partial class PipeTaskTemplateControl
         moveDownButton = new Button();
         nameLabel = new Label();
         removeButton = new Button();
+        chatBotNameLabel = new Label();
         SuspendLayout();
         // 
         // insertAboveButton
         // 
-        insertAboveButton.Location = new Point(147, 3);
+        insertAboveButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        insertAboveButton.Location = new Point(231, 3);
         insertAboveButton.Name = "insertAboveButton";
         insertAboveButton.Size = new Size(167, 23);
         insertAboveButton.TabIndex = 0;
@@ -48,7 +50,7 @@ partial class PipeTaskTemplateControl
         // moveUpButton
         // 
         moveUpButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        moveUpButton.Location = new Point(320, 3);
+        moveUpButton.Location = new Point(404, 3);
         moveUpButton.Name = "moveUpButton";
         moveUpButton.Size = new Size(93, 23);
         moveUpButton.TabIndex = 1;
@@ -59,7 +61,7 @@ partial class PipeTaskTemplateControl
         // moveDownButton
         // 
         moveDownButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        moveDownButton.Location = new Point(320, 32);
+        moveDownButton.Location = new Point(404, 32);
         moveDownButton.Name = "moveDownButton";
         moveDownButton.Size = new Size(93, 23);
         moveDownButton.TabIndex = 2;
@@ -72,7 +74,7 @@ partial class PipeTaskTemplateControl
         nameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         nameLabel.Location = new Point(3, 36);
         nameLabel.Name = "nameLabel";
-        nameLabel.Size = new Size(311, 19);
+        nameLabel.Size = new Size(395, 19);
         nameLabel.TabIndex = 3;
         nameLabel.Text = "Task template name";
         // 
@@ -86,17 +88,28 @@ partial class PipeTaskTemplateControl
         removeButton.UseVisualStyleBackColor = true;
         removeButton.Click += RemoveButton_Click;
         // 
+        // chatBotNameLabel
+        // 
+        chatBotNameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        chatBotNameLabel.Location = new Point(84, 7);
+        chatBotNameLabel.Name = "chatBotNameLabel";
+        chatBotNameLabel.Size = new Size(141, 19);
+        chatBotNameLabel.TabIndex = 5;
+        chatBotNameLabel.Text = "Chat bot name";
+        chatBotNameLabel.TextAlign = ContentAlignment.TopRight;
+        // 
         // PipeTaskTemplateControl
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
+        Controls.Add(chatBotNameLabel);
         Controls.Add(removeButton);
         Controls.Add(nameLabel);
         Controls.Add(moveDownButton);
         Controls.Add(moveUpButton);
         Controls.Add(insertAboveButton);
         Name = "PipeTaskTemplateControl";
-        Size = new Size(416, 60);
+        Size = new Size(500, 60);
         ResumeLayout(false);
     }
 
@@ -107,4 +120,5 @@ partial class PipeTaskTemplateControl
     private Button moveDownButton;
     private Label nameLabel;
     private Button removeButton;
+    private Label chatBotNameLabel;
 }

@@ -1,5 +1,6 @@
 ﻿namespace ChatBotPipes.WinformsApp.Controls;
 
+using ChatBotPipes.Client.Implementation;
 using ChatBotPipes.Core;
 using ChatBotPipes.WinformsApp.Forms;
 using System;
@@ -15,6 +16,8 @@ using System.Windows.Forms;
 
 public partial class TaskTemplateEditor : UserControl
 {
+    private readonly IChatBotProvider _chatBotProvider = null!;
+
     public event EventHandler<ChatBotTaskTemplate>? TaskTemplateUpdated;
 
     public event EventHandler<ChatBotTaskTemplate>? TaskTemplateDeleted;
@@ -37,6 +40,14 @@ public partial class TaskTemplateEditor : UserControl
         InitializeComponent();
 
         SetControlsEditable();
+
+        if (!DesignMode)
+        {
+            _chatBotProvider = Services.Get<IChatBotProvider>();
+
+            chatBotSelectionComboBox.Items.Clear();
+            chatBotSelectionComboBox.Items.AddRange(_chatBotProvider.GetBotNames().Prepend("").ToArray());
+        }
     }
 
     private void SetControlsEditable()
@@ -57,6 +68,8 @@ public partial class TaskTemplateEditor : UserControl
 
         taskTemplateNameTextBox.Text = taskTemplate.Name;
 
+        UpdateComboBoxFromChatBotName(taskTemplate);
+
         foreach (var chatMessageControl in chatMessagePanel.Controls.OfType<ChatMessageControl>())
         {
             chatMessageControl.MessageUpdated -= ChatMessageControl_MessageUpdated;
@@ -69,6 +82,21 @@ public partial class TaskTemplateEditor : UserControl
         {
             AddChatMessage(taskTemplate, i);
         }
+    }
+
+    private void UpdateComboBoxFromChatBotName(ChatBotTaskTemplate taskTemplate)
+    {
+        for (int i = 0; i < chatBotSelectionComboBox.Items.Count; i++)
+        {
+            string chatBotName = (string)chatBotSelectionComboBox.Items[i];
+
+            if (chatBotName == taskTemplate.ChatBotName)
+            {
+                chatBotSelectionComboBox.SelectedIndex = i;
+                return;
+            }
+        }
+        chatBotSelectionComboBox.SelectedIndex = 0;
     }
 
     private void AddChatMessage(ChatBotTaskTemplate taskTemplate, int chatMessageIndex)
@@ -154,5 +182,10 @@ public partial class TaskTemplateEditor : UserControl
         runnerForm.SetTaskTemplate(TaskTemplate);
 
         runnerForm.ShowDialog();
+    }
+
+    private void ChatBotSelectionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        UpdateTaskTemplate(template => template.ChatBotName = chatBotSelectionComboBox.SelectedItem.ToString());
     }
 }

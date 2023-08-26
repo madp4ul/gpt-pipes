@@ -9,13 +9,15 @@ public class ChatGptChatBot : IChatBot
 {
     private readonly IApiKeyStore _apiKeyStore;
     private readonly ICurrentUserService _currentUserService;
+    private readonly ChatGptChatBotOptions? _options;
 
     private readonly OpenAI_API.OpenAIAPI _api;
 
-    public ChatGptChatBot(IApiKeyStore apiKeyStore, ICurrentUserService currentUserService)
+    public ChatGptChatBot(IApiKeyStore apiKeyStore, ICurrentUserService currentUserService, ChatGptChatBotOptions? options = null)
     {
         _apiKeyStore = apiKeyStore;
         _currentUserService = currentUserService;
+        _options = options;
 
         _api = new OpenAI_API.OpenAIAPI();
     }
@@ -49,7 +51,7 @@ public class ChatGptChatBot : IChatBot
 
     private Conversation CreateConversation(ChatBotTask task)
     {
-        var conversation = _api.Chat.CreateConversation();
+        var conversation = _api.Chat.CreateConversation(_options?.ChatRequest);
 
         foreach (var instruction in task.PredefinedInstructions)
         {

@@ -34,6 +34,7 @@ partial class TaskTemplateEditor
         addMessageButton = new Button();
         chatMessagePanel = new Panel();
         runButton = new Button();
+        chatBotSelectionComboBox = new ComboBox();
         SuspendLayout();
         // 
         // label1
@@ -96,10 +97,20 @@ partial class TaskTemplateEditor
         runButton.UseVisualStyleBackColor = true;
         runButton.Click += RunButton_Click;
         // 
+        // chatBotSelectionComboBox
+        // 
+        chatBotSelectionComboBox.FormattingEnabled = true;
+        chatBotSelectionComboBox.Location = new Point(247, 8);
+        chatBotSelectionComboBox.Name = "chatBotSelectionComboBox";
+        chatBotSelectionComboBox.Size = new Size(121, 23);
+        chatBotSelectionComboBox.TabIndex = 10;
+        chatBotSelectionComboBox.SelectedIndexChanged += ChatBotSelectionComboBox_SelectedIndexChanged;
+        // 
         // TaskTemplateEditor
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
+        Controls.Add(chatBotSelectionComboBox);
         Controls.Add(runButton);
         Controls.Add(chatMessagePanel);
         Controls.Add(addMessageButton);
@@ -120,4 +131,5 @@ partial class TaskTemplateEditor
     private Button addMessageButton;
     private Panel chatMessagePanel;
     private Button runButton;
+    private ComboBox chatBotSelectionComboBox;
 }

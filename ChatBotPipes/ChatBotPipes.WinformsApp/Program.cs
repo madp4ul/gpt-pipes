@@ -45,6 +45,8 @@ internal static class Program
 
         await currentUserService.SetCurrentUserAsync(AppUser.Default);
 
+        host.UseChatGptBots();
+
 
         Services.SetProvider(host.Services);
     }

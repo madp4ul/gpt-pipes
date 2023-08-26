@@ -56,6 +56,7 @@ public class FilebasedChatBotPipeStore : IChatBotPipeStore
             }
 
             var pipeTaskTemplates = pipe.TaskTemplatesIds
+                .Where(id => allTaskTemplates.ContainsKey(id.Id)) // filter out references to deleted templates.
                 .Select(id => allTaskTemplates[id.Id])
                 .ToList();
 

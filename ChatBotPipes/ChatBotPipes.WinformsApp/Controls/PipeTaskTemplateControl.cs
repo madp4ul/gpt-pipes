@@ -1,5 +1,6 @@
 ﻿namespace ChatBotPipes.WinformsApp.Controls;
 
+using ChatBotPipes.Client.Implementation;
 using ChatBotPipes.Core;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ using System.Windows.Forms;
 
 public partial class PipeTaskTemplateControl : UserControl
 {
+    private readonly IChatBotProvider _chatBotProvider = null!;
+
     public event EventHandler<ChatBotTaskTemplate>? InsertAboveRequested;
     public event EventHandler<ChatBotTaskTemplate>? MoveUpRequested;
     public event EventHandler<ChatBotTaskTemplate>? MoveDownRequested;
@@ -23,6 +26,11 @@ public partial class PipeTaskTemplateControl : UserControl
     public PipeTaskTemplateControl()
     {
         InitializeComponent();
+
+        if (!DesignMode)
+        {
+            _chatBotProvider = Services.Get<IChatBotProvider>();
+        }
     }
 
     public void SetTaskTemplate(ChatBotTaskTemplate taskTemplate)
@@ -30,6 +38,7 @@ public partial class PipeTaskTemplateControl : UserControl
         TaskTemplate = taskTemplate;
 
         nameLabel.Text = taskTemplate.Name;
+        chatBotNameLabel.Text = taskTemplate.ChatBotName ?? $"{_chatBotProvider.GetDefaultBotName()} (default)";
     }
 
     private void InsertAboveButton_Click(object sender, EventArgs e)

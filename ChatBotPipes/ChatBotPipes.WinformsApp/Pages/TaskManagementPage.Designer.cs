@@ -70,6 +70,7 @@ partial class TaskManagementPage
         // taskTemplateEditor
         // 
         taskTemplateEditor.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        taskTemplateEditor.CanEdit = true;
         taskTemplateEditor.Location = new Point(206, 3);
         taskTemplateEditor.Name = "taskTemplateEditor";
         taskTemplateEditor.Size = new Size(539, 508);
@@ -78,13 +79,13 @@ partial class TaskManagementPage
         taskTemplateEditor.TaskTemplateUpdated += TaskTemplateEditor_TaskTemplateUpdated;
         taskTemplateEditor.TaskTemplateDeleted += TaskTemplateEditor_TaskTemplateDeleted;
         // 
-        // TaskManagement
+        // TaskManagementPage
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         Controls.Add(taskTemplateEditor);
         Controls.Add(panel1);
-        Name = "TaskManagement";
+        Name = "TaskManagementPage";
         Size = new Size(748, 514);
         Load += TaskManagement_Load;
         panel1.ResumeLayout(false);

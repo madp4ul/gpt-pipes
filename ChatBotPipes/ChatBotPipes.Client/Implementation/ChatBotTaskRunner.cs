@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 
 public class ChatBotTaskRunner : IChatBotTaskRunner
 {
-    private readonly IChatBot _chatBot;
+    private readonly IChatBotProvider _chatBotProvider;
 
-    public ChatBotTaskRunner(IChatBot chatBot)
+    public ChatBotTaskRunner(IChatBotProvider chatBotProvider)
     {
-        _chatBot = chatBot ?? throw new ArgumentNullException(nameof(chatBot));
+        _chatBotProvider = chatBotProvider;
     }
 
     public async Task<IChatBotResponse> RunTaskAsync(ChatBotTaskTemplate taskTemplate, string input, ITaskTemplateFiller taskTemplateFiller)
     {
+        var chatBot = _chatBotProvider.CreateChatBot(taskTemplate.ChatBotName);
+
         var task = taskTemplateFiller.FillInput(taskTemplate, input);
 
-        var response = await _chatBot.RespondAsync(task);
+        var response = await chatBot.RespondAsync(task);
 
         return response;
     }

@@ -1,5 +1,6 @@
 ﻿namespace ChatBotPipes.WinformsApp.Pages;
 
+using ChatBotPipes.Client.Implementation;
 using ChatBotPipes.Core;
 using ChatBotPipes.Server;
 using ChatBotPipes.WinformsApp.Controls;
@@ -80,7 +81,8 @@ public partial class TaskManagementPage : UserControl
     {
         var newTaskTemplate = new ChatBotTaskTemplate(
             new List<ChatMessage> { new ChatMessage("System message", ChatMessageAuthor.System) },
-            "New Task");
+            "New Task",
+            null);
 
         await _taskTemplateStore.AddTaskTemplateAsync(AppUser.Default, newTaskTemplate);
 
