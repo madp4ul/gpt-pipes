@@ -19,6 +19,8 @@ public partial class PipeManagementPage : UserControl
 
     private List<ChatBotPipe> _pipes = new();
 
+    private bool _isLoaded = false;
+
     public PipeManagementPage()
     {
         InitializeComponent();
@@ -32,7 +34,7 @@ public partial class PipeManagementPage : UserControl
 
     }
 
-    private async void PipeManagementPage_Load(object sender, EventArgs e)
+    private void PipeManagementPage_Load(object sender, EventArgs e)
     {
         if (DesignMode)
         {
@@ -40,6 +42,18 @@ public partial class PipeManagementPage : UserControl
         }
 
         InitializeServices();
+
+        _isLoaded = true;
+    }
+
+    protected override async void OnVisibleChanged(EventArgs e)
+    {
+        base.OnVisibleChanged(e);
+
+        if (!_isLoaded)
+        {
+            return;
+        }
 
         _pipes = await _chatBotPipeStore.GetPipesAsync(AppUser.Default);
 
@@ -49,6 +63,8 @@ public partial class PipeManagementPage : UserControl
         }
 
         UpdatePipeList();
+
+        UpdatePipeEditor();
     }
 
     private async void AddPipeButton_Click(object sender, EventArgs e)
@@ -78,6 +94,11 @@ public partial class PipeManagementPage : UserControl
     }
 
     private void PipesListBox_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        UpdatePipeEditor();
+    }
+
+    private void UpdatePipeEditor()
     {
         if (pipesListBox.SelectedItem is ChatBotPipe selectedPipe)
         {
