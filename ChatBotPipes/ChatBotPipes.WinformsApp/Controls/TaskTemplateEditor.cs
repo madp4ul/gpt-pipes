@@ -55,6 +55,7 @@ public partial class TaskTemplateEditor : UserControl
         addMessageButton.Visible = CanEdit;
         deleteTaskTemplateButton.Visible = CanEdit;
         taskTemplateNameTextBox.Enabled = CanEdit;
+        chatBotSelectionComboBox.Enabled = CanEdit;
 
         foreach (var chatMessageControl in chatMessagePanel.Controls.OfType<ChatMessageControl>())
         {
