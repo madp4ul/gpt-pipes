@@ -30,6 +30,7 @@ partial class SettingsPage
     {
         label1 = new Label();
         apiKeyTextBox = new TextBox();
+        buttonShowApiKey = new Button();
         SuspendLayout();
         // 
         // label1
@@ -46,14 +47,27 @@ partial class SettingsPage
         apiKeyTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
         apiKeyTextBox.Location = new Point(112, 13);
         apiKeyTextBox.Name = "apiKeyTextBox";
-        apiKeyTextBox.Size = new Size(363, 23);
+        apiKeyTextBox.Size = new Size(301, 23);
         apiKeyTextBox.TabIndex = 1;
+        apiKeyTextBox.UseSystemPasswordChar = true;
         apiKeyTextBox.Leave += apiKeyTextBox_Leave;
+        // 
+        // buttonShowApiKey
+        // 
+        buttonShowApiKey.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        buttonShowApiKey.Location = new Point(419, 13);
+        buttonShowApiKey.Name = "buttonShowApiKey";
+        buttonShowApiKey.Size = new Size(56, 23);
+        buttonShowApiKey.TabIndex = 2;
+        buttonShowApiKey.Text = "Show";
+        buttonShowApiKey.UseVisualStyleBackColor = true;
+        buttonShowApiKey.Click += buttonShowApiKey_Click;
         // 
         // SettingsPage
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
+        Controls.Add(buttonShowApiKey);
         Controls.Add(apiKeyTextBox);
         Controls.Add(label1);
         Name = "SettingsPage";
@@ -67,4 +81,5 @@ partial class SettingsPage
 
     private Label label1;
     private TextBox apiKeyTextBox;
+    private Button buttonShowApiKey;
 }

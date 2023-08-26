@@ -45,5 +45,9 @@ public partial class SettingsPage : UserControl
         await _apiKeyStore.SetApiKeyAsync(apiKey);
     }
 
-
+    private void buttonShowApiKey_Click(object sender, EventArgs e)
+    {
+        apiKeyTextBox.UseSystemPasswordChar = !apiKeyTextBox.UseSystemPasswordChar;
+        buttonShowApiKey.Text = apiKeyTextBox.UseSystemPasswordChar ? "Show" : "Hide";
+    }
 }
