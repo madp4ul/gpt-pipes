@@ -33,16 +33,16 @@ public partial class PipeEditor : UserControl
 
         nameTextBox.Text = pipe.Name;
 
-        foreach (var control in taskTemplatePanel.Controls.OfType<PipeTaskTemplateControl>())
+        foreach (var control in taskTemplatePanel.Rows.OfType<PipeTaskTemplateControl>())
         {
             UnsubscribeEvents(control);
         }
 
-        taskTemplatePanel.Controls.Clear();
+        taskTemplatePanel.ClearRows();
 
         foreach (var taskTemplate in pipe.Tasks)
         {
-            taskTemplatePanel.Controls.Add(CreateTaskTemplateControl(taskTemplate, pipe));
+            taskTemplatePanel.AddRow(CreateTaskTemplateControl(taskTemplate, pipe));
         }
     }
 
@@ -88,7 +88,7 @@ public partial class PipeEditor : UserControl
                 pipe.Tasks.Add(taskTemplateMapping);
 
                 var control = CreateTaskTemplateControl(taskTemplateMapping, pipe);
-                taskTemplatePanel.Controls.Add(control);
+                taskTemplatePanel.AddRow(control);
             }
         });
     }
@@ -111,10 +111,7 @@ public partial class PipeEditor : UserControl
 
     private PipeTaskTemplateControl CreateTaskTemplateControl(MappedChatBotTaskTemplate taskTemplate, ChatBotPipe sourcePipe)
     {
-        var control = new PipeTaskTemplateControl()
-        {
-            Width = taskTemplatePanel.Width - 30,
-        };
+        var control = new PipeTaskTemplateControl();
 
         control.SetTaskTemplate(taskTemplate, sourcePipe);
 
@@ -150,7 +147,7 @@ public partial class PipeEditor : UserControl
             pipe.Tasks.RemoveAt(index);
             pipe.Tasks.Insert(newIndex, currentTaskTemplate);
 
-            taskTemplatePanel.Controls.SetChildIndex((Control)sender!, newIndex);
+            taskTemplatePanel.SetRowIndex((Control)sender!, newIndex);
         });
     }
 
@@ -169,7 +166,7 @@ public partial class PipeEditor : UserControl
             pipe.Tasks.RemoveAt(index);
             pipe.Tasks.Insert(newIndex, currentTaskTemplate);
 
-            taskTemplatePanel.Controls.SetChildIndex((Control)sender!, newIndex);
+            taskTemplatePanel.SetRowIndex((Control)sender!, newIndex);
         });
     }
 
@@ -186,8 +183,8 @@ public partial class PipeEditor : UserControl
                 pipe.Tasks.Insert(index, taskTemplateMapping);
 
                 var control = CreateTaskTemplateControl(taskTemplateMapping, pipe);
-                taskTemplatePanel.Controls.Add(control);
-                taskTemplatePanel.Controls.SetChildIndex(control, index);
+                taskTemplatePanel.AddRow(control);
+                taskTemplatePanel.SetRowIndex(control, index);
             }
         });
     }
@@ -202,7 +199,7 @@ public partial class PipeEditor : UserControl
             var control = (PipeTaskTemplateControl)sender!;
             UnsubscribeEvents(control);
 
-            taskTemplatePanel.Controls.Remove(control);
+            taskTemplatePanel.RemoveRow(control);
         });
     }
 

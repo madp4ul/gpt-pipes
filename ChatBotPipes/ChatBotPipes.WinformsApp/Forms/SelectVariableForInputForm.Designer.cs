@@ -28,24 +28,13 @@ partial class SelectVariableForInputForm
     /// </summary>
     private void InitializeComponent()
     {
-        ListViewGroup listViewGroup1 = new ListViewGroup("ListViewGroup fw f w", HorizontalAlignment.Left);
-        ListViewGroup listViewGroup2 = new ListViewGroup("ListViewGroup", HorizontalAlignment.Left);
-        ListViewItem listViewItem1 = new ListViewItem(new string[] { "Item1", "wef wwf" }, -1);
-        ListViewItem listViewItem2 = new ListViewItem(new string[] { "Item2", "2Sub1", "2Sub2" }, -1);
         variablesListView = new ListView();
         SuspendLayout();
         // 
         // variablesListView
         // 
         variablesListView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        listViewGroup1.Header = "ListViewGroup fw f w";
-        listViewGroup1.Name = "listViewGroup1";
-        listViewGroup2.Header = "ListViewGroup";
-        listViewGroup2.Name = "listViewGroup2";
-        variablesListView.Groups.AddRange(new ListViewGroup[] { listViewGroup1, listViewGroup2 });
         variablesListView.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-        listViewItem1.Group = listViewGroup1;
-        variablesListView.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
         variablesListView.Location = new Point(12, 12);
         variablesListView.MultiSelect = false;
         variablesListView.Name = "variablesListView";

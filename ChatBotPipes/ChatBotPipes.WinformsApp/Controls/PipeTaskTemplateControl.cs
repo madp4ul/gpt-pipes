@@ -52,21 +52,18 @@ public partial class PipeTaskTemplateControl : UserControl
 
     private void UpdateInputMappingControls(MappedChatBotTaskTemplate taskTemplateMapping, ChatBotPipe sourcePipe)
     {
-        foreach (var control in inputMappingPanel.Controls.OfType<PipeInputMappingControl>())
+        foreach (var control in inputMappingPanel.Rows.OfType<PipeInputMappingControl>())
         {
             control.InputMappingChanged -= Control_InputMappingChanged;
         }
 
-        inputMappingPanel.Controls.Clear();
+        inputMappingPanel.ClearRows();
 
         var inputs = _taskTemplateFiller.GetInputs(taskTemplateMapping.TaskTemplate);
 
         foreach (var input in inputs)
         {
-            var control = new PipeInputMappingControl()
-            {
-                Width = inputMappingPanel.Width - 30
-            };
+            var control = new PipeInputMappingControl();
 
             var variableReference = taskTemplateMapping.InputMapping.GetValueOrDefault(input);
 
@@ -76,7 +73,7 @@ public partial class PipeTaskTemplateControl : UserControl
 
             control.InputMappingChanged += Control_InputMappingChanged;
 
-            inputMappingPanel.Controls.Add(control);
+            inputMappingPanel.AddRow(control);
         }
     }
 

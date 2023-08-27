@@ -50,11 +50,11 @@ public partial class SelectVariableForInputForm : Form
 
     private void AddUserInputItem()
     {
-        var noneGroup = new ListViewGroup("None");
-        variablesListView.Groups.Add(noneGroup);
-        _groupMap.Add(noneGroup, null);
+        var generalGroup = new ListViewGroup("General");
+        variablesListView.Groups.Add(generalGroup);
+        _groupMap.Add(generalGroup, null);
 
-        var userInputItem = new ListViewItem("User input", noneGroup);
+        var userInputItem = new ListViewItem("User input", generalGroup);
         variablesListView.Items.Add(userInputItem);
     }
 

@@ -50,26 +50,23 @@ public partial class PipeRunnerForm : Form
 
     private void UpdateUserInputControls(ChatBotPipe pipe)
     {
-        foreach (var control in userInputPanel.Controls.OfType<UserPipeInputControl>())
+        foreach (var control in userInputPanel.Rows.OfType<UserPipeInputControl>())
         {
             control.UserInputChanged -= UserInputControl_UserInputChanged;
         }
 
-        userInputPanel.Controls.Clear();
+        userInputPanel.ClearRows();
 
         var inputs = pipe.GetRequiredInputs(_taskTemplateFiller);
 
         foreach (TaskTemplateVariableName input in inputs)
         {
-            var userInputControl = new UserPipeInputControl()
-            {
-                Width = userInputPanel.Width - 30
-            };
+            var userInputControl = new UserPipeInputControl();
 
             userInputControl.SetUserInputName(input);
             userInputControl.UserInputChanged += UserInputControl_UserInputChanged;
 
-            userInputPanel.Controls.Add(userInputControl);
+            userInputPanel.AddRow(userInputControl);
         }
     }
 
@@ -84,15 +81,12 @@ public partial class PipeRunnerForm : Form
     {
         foreach (var taskMapping in pipe.Tasks)
         {
-            var taskControl = new PipeRunnerTaskControl
-            {
-                Width = outputPanel.Width - 30
-            };
+            var taskControl = new PipeRunnerTaskControl();
 
             taskControl.SetTaskTemplate(taskMapping.TaskTemplate);
 
             _pipeRunnerTaskControls.Add(taskControl);
-            outputPanel.Controls.Add(taskControl);
+            outputPanel.AddRow(taskControl);
         }
     }
 

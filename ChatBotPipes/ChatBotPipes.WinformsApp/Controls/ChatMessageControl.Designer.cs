@@ -39,7 +39,8 @@ partial class ChatMessageControl
         messageTextBox.Location = new Point(99, 3);
         messageTextBox.Multiline = true;
         messageTextBox.Name = "messageTextBox";
-        messageTextBox.Size = new Size(201, 70);
+        messageTextBox.ScrollBars = ScrollBars.Vertical;
+        messageTextBox.Size = new Size(331, 144);
         messageTextBox.TabIndex = 0;
         messageTextBox.Leave += MessageTextBox_Leave;
         // 
@@ -55,7 +56,7 @@ partial class ChatMessageControl
         // deleteButton
         // 
         deleteButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        deleteButton.Location = new Point(306, 3);
+        deleteButton.Location = new Point(436, 3);
         deleteButton.Name = "deleteButton";
         deleteButton.Size = new Size(24, 23);
         deleteButton.TabIndex = 2;
@@ -71,7 +72,7 @@ partial class ChatMessageControl
         Controls.Add(authorComboBox);
         Controls.Add(messageTextBox);
         Name = "ChatMessageControl";
-        Size = new Size(333, 80);
+        Size = new Size(463, 154);
         ResumeLayout(false);
         PerformLayout();
     }

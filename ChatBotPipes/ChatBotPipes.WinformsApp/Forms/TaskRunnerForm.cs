@@ -48,26 +48,23 @@ public partial class TaskRunnerForm : Form
 
     private void UpdateUserInputControls(ChatBotTaskTemplate taskTemplate)
     {
-        foreach (var control in userInputPanel.Controls.OfType<UserTaskInputControl>())
+        foreach (var control in userInputPanel.Rows.OfType<UserTaskInputControl>())
         {
             control.UserInputChanged -= UserInputControl_UserInputChanged;
         }
 
-        userInputPanel.Controls.Clear();
+        userInputPanel.ClearRows();
 
         var inputs = _taskTemplateFiller.GetInputs(taskTemplate);
 
         foreach (string input in inputs)
         {
-            var userInputControl = new UserTaskInputControl()
-            {
-                Width = userInputPanel.Width - 30
-            };
+            var userInputControl = new UserTaskInputControl();
 
             userInputControl.SetUserInputName(input);
             userInputControl.UserInputChanged += UserInputControl_UserInputChanged;
 
-            userInputPanel.Controls.Add(userInputControl);
+            userInputPanel.AddRow(userInputControl);
         }
     }
 
@@ -103,7 +100,7 @@ public partial class TaskRunnerForm : Form
     {
         runButton.Enabled = enabled;
 
-        foreach (var control in userInputPanel.Controls.OfType<UserTaskInputControl>())
+        foreach (var control in userInputPanel.Rows.OfType<UserTaskInputControl>())
         {
             control.Enabled = enabled;
         }

@@ -34,9 +34,9 @@ partial class PipeTaskTemplateControl
         nameLabel = new Label();
         removeButton = new Button();
         chatBotNameLabel = new Label();
-        inputMappingPanel = new FlowLayoutPanel();
         label1 = new Label();
         label2 = new Label();
+        inputMappingPanel = new AutoTopDownLayoutControl();
         SuspendLayout();
         // 
         // insertAboveButton
@@ -102,17 +102,6 @@ partial class PipeTaskTemplateControl
         chatBotNameLabel.Text = "Chat bot name";
         chatBotNameLabel.TextAlign = ContentAlignment.TopRight;
         // 
-        // inputMappingPanel
-        // 
-        inputMappingPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        inputMappingPanel.AutoScroll = true;
-        inputMappingPanel.BackColor = SystemColors.ControlLightLight;
-        inputMappingPanel.BorderStyle = BorderStyle.Fixed3D;
-        inputMappingPanel.Location = new Point(3, 50);
-        inputMappingPanel.Name = "inputMappingPanel";
-        inputMappingPanel.Size = new Size(396, 104);
-        inputMappingPanel.TabIndex = 6;
-        // 
         // label1
         // 
         label1.AutoSize = true;
@@ -131,14 +120,23 @@ partial class PipeTaskTemplateControl
         label2.TabIndex = 8;
         label2.Text = "Input mappings:";
         // 
+        // inputMappingPanel
+        // 
+        inputMappingPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        inputMappingPanel.BorderStyle = BorderStyle.Fixed3D;
+        inputMappingPanel.Location = new Point(3, 50);
+        inputMappingPanel.Name = "inputMappingPanel";
+        inputMappingPanel.Size = new Size(396, 104);
+        inputMappingPanel.TabIndex = 9;
+        // 
         // PipeTaskTemplateControl
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         BorderStyle = BorderStyle.FixedSingle;
+        Controls.Add(inputMappingPanel);
         Controls.Add(label2);
         Controls.Add(label1);
-        Controls.Add(inputMappingPanel);
         Controls.Add(chatBotNameLabel);
         Controls.Add(removeButton);
         Controls.Add(nameLabel);
@@ -159,7 +157,7 @@ partial class PipeTaskTemplateControl
     private Label nameLabel;
     private Button removeButton;
     private Label chatBotNameLabel;
-    private FlowLayoutPanel inputMappingPanel;
     private Label label1;
     private Label label2;
+    private AutoTopDownLayoutControl inputMappingPanel;
 }

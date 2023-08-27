@@ -32,8 +32,8 @@ partial class PipeEditor
         nameTextBox = new TextBox();
         deletePipeButton = new Button();
         runPipeButton = new Button();
-        taskTemplatePanel = new FlowLayoutPanel();
         addTaskToEndButton = new Button();
+        taskTemplatePanel = new AutoTopDownLayoutControl();
         SuspendLayout();
         // 
         // label1
@@ -75,17 +75,6 @@ partial class PipeEditor
         runPipeButton.UseVisualStyleBackColor = true;
         runPipeButton.Click += RunPipeButton_Click;
         // 
-        // taskTemplatePanel
-        // 
-        taskTemplatePanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        taskTemplatePanel.AutoScroll = true;
-        taskTemplatePanel.FlowDirection = FlowDirection.TopDown;
-        taskTemplatePanel.Location = new Point(3, 38);
-        taskTemplatePanel.Name = "taskTemplatePanel";
-        taskTemplatePanel.Size = new Size(479, 314);
-        taskTemplatePanel.TabIndex = 4;
-        taskTemplatePanel.WrapContents = false;
-        // 
         // addTaskToEndButton
         // 
         addTaskToEndButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -97,12 +86,20 @@ partial class PipeEditor
         addTaskToEndButton.UseVisualStyleBackColor = true;
         addTaskToEndButton.Click += AddTaskToEndButton_Click;
         // 
+        // taskTemplatePanel
+        // 
+        taskTemplatePanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        taskTemplatePanel.Location = new Point(3, 38);
+        taskTemplatePanel.Name = "taskTemplatePanel";
+        taskTemplatePanel.Size = new Size(479, 314);
+        taskTemplatePanel.TabIndex = 6;
+        // 
         // PipeEditor
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(addTaskToEndButton);
         Controls.Add(taskTemplatePanel);
+        Controls.Add(addTaskToEndButton);
         Controls.Add(runPipeButton);
         Controls.Add(deletePipeButton);
         Controls.Add(nameTextBox);
@@ -119,6 +116,6 @@ partial class PipeEditor
     private TextBox nameTextBox;
     private Button deletePipeButton;
     private Button runPipeButton;
-    private FlowLayoutPanel taskTemplatePanel;
     private Button addTaskToEndButton;
+    private AutoTopDownLayoutControl taskTemplatePanel;
 }

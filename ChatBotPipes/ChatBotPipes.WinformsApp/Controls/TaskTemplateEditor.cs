@@ -60,7 +60,7 @@ public partial class TaskTemplateEditor : UserControl
         taskTemplateNameTextBox.Enabled = CanEdit;
         chatBotSelectionComboBox.Enabled = CanEdit;
 
-        foreach (var chatMessageControl in chatMessagePanel.Controls.OfType<ChatMessageControl>())
+        foreach (var chatMessageControl in chatMessagePanel.Rows.OfType<ChatMessageControl>())
         {
             chatMessageControl.CanEdit = CanEdit;
         }
@@ -75,13 +75,13 @@ public partial class TaskTemplateEditor : UserControl
         UpdateComboBoxFromChatBotName(taskTemplate);
         UpdateInputListLabel(taskTemplate);
 
-        foreach (var chatMessageControl in chatMessagePanel.Controls.OfType<ChatMessageControl>())
+        foreach (var chatMessageControl in chatMessagePanel.Rows.OfType<ChatMessageControl>())
         {
             chatMessageControl.MessageUpdated -= ChatMessageControl_MessageUpdated;
             chatMessageControl.MessageDeleted -= ChatMessageControl_MessageDeleted;
         }
 
-        chatMessagePanel.Controls.Clear();
+        chatMessagePanel.ClearRows();
 
         for (int i = 0; i < taskTemplate.PredefinedInstructions.Count; i++)
         {
@@ -108,17 +108,13 @@ public partial class TaskTemplateEditor : UserControl
     {
         var chatMessageControl = new ChatMessageControl(taskTemplate.PredefinedInstructions[chatMessageIndex])
         {
-            Width = chatMessagePanel.Width - 20,
-            Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right,
             CanEdit = CanEdit
         };
 
         chatMessageControl.MessageUpdated += ChatMessageControl_MessageUpdated;
         chatMessageControl.MessageDeleted += ChatMessageControl_MessageDeleted;
 
-        chatMessageControl.Top = chatMessageIndex * chatMessageControl.Height + chatMessagePanel.AutoScrollPosition.Y;
-
-        chatMessagePanel.Controls.Add(chatMessageControl);
+        chatMessagePanel.AddRow(chatMessageControl);
     }
 
     private void ChatMessageControl_MessageUpdated(object? sender, EventArgs e)
@@ -144,7 +140,7 @@ public partial class TaskTemplateEditor : UserControl
         {
             template.PredefinedInstructions.Remove(chatMessageControl.ChatMessage);
 
-            chatMessagePanel.Controls.Remove(chatMessageControl);
+            chatMessagePanel.RemoveRow(chatMessageControl);
         });
     }
 

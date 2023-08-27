@@ -31,20 +31,21 @@ partial class TaskRunnerForm
         nameLabel = new Label();
         runButton = new Button();
         outputTextBox = new Controls.OutputTextBox();
-        userInputPanel = new FlowLayoutPanel();
-        label2 = new Label();
-        panel1 = new Panel();
         chatPreviewPanel = new FlowLayoutPanel();
         label1 = new Label();
-        userInputPanel.SuspendLayout();
-        panel1.SuspendLayout();
+        splitContainer1 = new SplitContainer();
+        userInputPanel = new Controls.AutoTopDownLayoutControl();
         chatPreviewPanel.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+        splitContainer1.Panel1.SuspendLayout();
+        splitContainer1.Panel2.SuspendLayout();
+        splitContainer1.SuspendLayout();
         SuspendLayout();
         // 
         // nameLabel
         // 
         nameLabel.AutoSize = true;
-        nameLabel.Location = new Point(12, 9);
+        nameLabel.Location = new Point(3, 0);
         nameLabel.Name = "nameLabel";
         nameLabel.Size = new Size(62, 15);
         nameLabel.TabIndex = 0;
@@ -53,7 +54,7 @@ partial class TaskRunnerForm
         // runButton
         // 
         runButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        runButton.Location = new Point(406, 666);
+        runButton.Location = new Point(381, 651);
         runButton.Name = "runButton";
         runButton.Size = new Size(75, 23);
         runButton.TabIndex = 4;
@@ -64,40 +65,11 @@ partial class TaskRunnerForm
         // outputTextBox
         // 
         outputTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        outputTextBox.Location = new Point(3, 362);
+        outputTextBox.Location = new Point(6, 436);
         outputTextBox.Name = "outputTextBox";
         outputTextBox.OutputText = "";
-        outputTextBox.Size = new Size(500, 297);
+        outputTextBox.Size = new Size(483, 238);
         outputTextBox.TabIndex = 7;
-        // 
-        // userInputPanel
-        // 
-        userInputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        userInputPanel.AutoScroll = true;
-        userInputPanel.Controls.Add(label2);
-        userInputPanel.Location = new Point(12, 27);
-        userInputPanel.Name = "userInputPanel";
-        userInputPanel.Size = new Size(469, 630);
-        userInputPanel.TabIndex = 8;
-        // 
-        // label2
-        // 
-        label2.AutoSize = true;
-        label2.Location = new Point(3, 0);
-        label2.Name = "label2";
-        label2.Size = new Size(89, 15);
-        label2.TabIndex = 0;
-        label2.Text = "Input textboxes";
-        // 
-        // panel1
-        // 
-        panel1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-        panel1.Controls.Add(chatPreviewPanel);
-        panel1.Controls.Add(outputTextBox);
-        panel1.Location = new Point(487, 27);
-        panel1.Name = "panel1";
-        panel1.Size = new Size(506, 662);
-        panel1.TabIndex = 9;
         // 
         // chatPreviewPanel
         // 
@@ -105,7 +77,7 @@ partial class TaskRunnerForm
         chatPreviewPanel.Controls.Add(label1);
         chatPreviewPanel.Location = new Point(3, 3);
         chatPreviewPanel.Name = "chatPreviewPanel";
-        chatPreviewPanel.Size = new Size(500, 353);
+        chatPreviewPanel.Size = new Size(486, 427);
         chatPreviewPanel.TabIndex = 8;
         // 
         // label1
@@ -117,24 +89,53 @@ partial class TaskRunnerForm
         label1.TabIndex = 0;
         label1.Text = "todo chat preview here";
         // 
+        // splitContainer1
+        // 
+        splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        splitContainer1.Location = new Point(12, 12);
+        splitContainer1.Name = "splitContainer1";
+        // 
+        // splitContainer1.Panel1
+        // 
+        splitContainer1.Panel1.BackColor = SystemColors.ControlLightLight;
+        splitContainer1.Panel1.Controls.Add(userInputPanel);
+        splitContainer1.Panel1.Controls.Add(runButton);
+        splitContainer1.Panel1.Controls.Add(nameLabel);
+        // 
+        // splitContainer1.Panel2
+        // 
+        splitContainer1.Panel2.BackColor = SystemColors.ControlLightLight;
+        splitContainer1.Panel2.Controls.Add(outputTextBox);
+        splitContainer1.Panel2.Controls.Add(chatPreviewPanel);
+        splitContainer1.Size = new Size(981, 677);
+        splitContainer1.SplitterDistance = 459;
+        splitContainer1.SplitterWidth = 30;
+        splitContainer1.TabIndex = 10;
+        // 
+        // userInputPanel
+        // 
+        userInputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        userInputPanel.Location = new Point(3, 18);
+        userInputPanel.Name = "userInputPanel";
+        userInputPanel.Size = new Size(453, 627);
+        userInputPanel.TabIndex = 9;
+        // 
         // TaskRunnerForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(1005, 701);
-        Controls.Add(panel1);
-        Controls.Add(userInputPanel);
-        Controls.Add(runButton);
-        Controls.Add(nameLabel);
+        Controls.Add(splitContainer1);
         Name = "TaskRunnerForm";
         Text = "TaskRunnerForm";
-        userInputPanel.ResumeLayout(false);
-        userInputPanel.PerformLayout();
-        panel1.ResumeLayout(false);
         chatPreviewPanel.ResumeLayout(false);
         chatPreviewPanel.PerformLayout();
+        splitContainer1.Panel1.ResumeLayout(false);
+        splitContainer1.Panel1.PerformLayout();
+        splitContainer1.Panel2.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+        splitContainer1.ResumeLayout(false);
         ResumeLayout(false);
-        PerformLayout();
     }
 
     #endregion
@@ -142,9 +143,8 @@ partial class TaskRunnerForm
     private Label nameLabel;
     private Button runButton;
     private Controls.OutputTextBox outputTextBox;
-    private FlowLayoutPanel userInputPanel;
-    private Panel panel1;
     private FlowLayoutPanel chatPreviewPanel;
     private Label label1;
-    private Label label2;
+    private SplitContainer splitContainer1;
+    private Controls.AutoTopDownLayoutControl userInputPanel;
 }

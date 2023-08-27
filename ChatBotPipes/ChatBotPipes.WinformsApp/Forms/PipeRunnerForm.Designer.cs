@@ -29,97 +29,94 @@ partial class PipeRunnerForm
     private void InitializeComponent()
     {
         pipeNameLabel = new Label();
-        outputPanel = new FlowLayoutPanel();
-        label1 = new Label();
         runButton = new Button();
-        userInputPanel = new FlowLayoutPanel();
-        label2 = new Label();
-        outputPanel.SuspendLayout();
-        userInputPanel.SuspendLayout();
+        splitContainer = new SplitContainer();
+        userInputPanel = new Controls.AutoTopDownLayoutControl();
+        outputPanel = new Controls.AutoTopDownLayoutControl();
+        ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
+        splitContainer.Panel1.SuspendLayout();
+        splitContainer.Panel2.SuspendLayout();
+        splitContainer.SuspendLayout();
         SuspendLayout();
         // 
         // pipeNameLabel
         // 
         pipeNameLabel.AutoSize = true;
-        pipeNameLabel.Location = new Point(15, 9);
+        pipeNameLabel.Location = new Point(3, 0);
         pipeNameLabel.Name = "pipeNameLabel";
         pipeNameLabel.Size = new Size(63, 15);
         pipeNameLabel.TabIndex = 1;
         pipeNameLabel.Text = "Pipe name";
         // 
-        // outputPanel
-        // 
-        outputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-        outputPanel.AutoScroll = true;
-        outputPanel.Controls.Add(label1);
-        outputPanel.Location = new Point(567, 27);
-        outputPanel.Name = "outputPanel";
-        outputPanel.Size = new Size(437, 691);
-        outputPanel.TabIndex = 3;
-        // 
-        // label1
-        // 
-        label1.AutoSize = true;
-        label1.Location = new Point(3, 0);
-        label1.Name = "label1";
-        label1.Size = new Size(116, 15);
-        label1.TabIndex = 0;
-        label1.Text = "task output previews";
-        // 
         // runButton
         // 
         runButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        runButton.Location = new Point(472, 695);
+        runButton.Location = new Point(874, 699);
         runButton.Name = "runButton";
-        runButton.Size = new Size(75, 23);
+        runButton.Size = new Size(101, 23);
         runButton.TabIndex = 0;
         runButton.Text = "Run";
         runButton.UseVisualStyleBackColor = true;
         runButton.Click += RunButton_Click;
         // 
+        // splitContainer
+        // 
+        splitContainer.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        splitContainer.Location = new Point(12, 12);
+        splitContainer.Name = "splitContainer";
+        // 
+        // splitContainer.Panel1
+        // 
+        splitContainer.Panel1.BackColor = SystemColors.ControlLightLight;
+        splitContainer.Panel1.Controls.Add(userInputPanel);
+        splitContainer.Panel1.Controls.Add(pipeNameLabel);
+        // 
+        // splitContainer.Panel2
+        // 
+        splitContainer.Panel2.Controls.Add(outputPanel);
+        splitContainer.Size = new Size(992, 681);
+        splitContainer.SplitterDistance = 461;
+        splitContainer.SplitterWidth = 30;
+        splitContainer.TabIndex = 6;
+        // 
         // userInputPanel
         // 
         userInputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        userInputPanel.AutoScroll = true;
-        userInputPanel.Controls.Add(label2);
-        userInputPanel.Location = new Point(12, 27);
+        userInputPanel.Location = new Point(3, 18);
         userInputPanel.Name = "userInputPanel";
-        userInputPanel.Size = new Size(535, 662);
-        userInputPanel.TabIndex = 5;
+        userInputPanel.Size = new Size(455, 660);
+        userInputPanel.TabIndex = 6;
         // 
-        // label2
+        // outputPanel
         // 
-        label2.AutoSize = true;
-        label2.Location = new Point(3, 0);
-        label2.Name = "label2";
-        label2.Size = new Size(89, 15);
-        label2.TabIndex = 0;
-        label2.Text = "Input textboxes";
+        outputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        outputPanel.BackColor = SystemColors.ControlLightLight;
+        outputPanel.Location = new Point(3, 4);
+        outputPanel.Name = "outputPanel";
+        outputPanel.Size = new Size(495, 674);
+        outputPanel.TabIndex = 4;
         // 
         // PipeRunnerForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(1016, 730);
-        Controls.Add(userInputPanel);
         Controls.Add(runButton);
-        Controls.Add(outputPanel);
-        Controls.Add(pipeNameLabel);
+        Controls.Add(splitContainer);
         Name = "PipeRunnerForm";
         Text = "PipeRunnerForm";
-        outputPanel.ResumeLayout(false);
-        outputPanel.PerformLayout();
-        userInputPanel.ResumeLayout(false);
-        userInputPanel.PerformLayout();
+        splitContainer.Panel1.ResumeLayout(false);
+        splitContainer.Panel1.PerformLayout();
+        splitContainer.Panel2.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
+        splitContainer.ResumeLayout(false);
         ResumeLayout(false);
-        PerformLayout();
     }
 
     #endregion
     private Label pipeNameLabel;
-    private FlowLayoutPanel outputPanel;
     private Button runButton;
-    private FlowLayoutPanel userInputPanel;
-    private Label label1;
-    private Label label2;
+    private SplitContainer splitContainer;
+    private Controls.AutoTopDownLayoutControl outputPanel;
+    private Controls.AutoTopDownLayoutControl userInputPanel;
 }
