@@ -38,14 +38,14 @@ public partial class SettingsPage : UserControl
         _apiKeyStore = Services.Get<IApiKeyStore>();
     }
 
-    private async void apiKeyTextBox_Leave(object sender, EventArgs e)
+    private async void ApiKeyTextBox_Leave(object sender, EventArgs e)
     {
         var apiKey = new ApiKey(apiKeyTextBox.Text);
 
         await _apiKeyStore.SetApiKeyAsync(apiKey);
     }
 
-    private void buttonShowApiKey_Click(object sender, EventArgs e)
+    private void ButtonShowApiKey_Click(object sender, EventArgs e)
     {
         apiKeyTextBox.UseSystemPasswordChar = !apiKeyTextBox.UseSystemPasswordChar;
         buttonShowApiKey.Text = apiKeyTextBox.UseSystemPasswordChar ? "Show" : "Hide";

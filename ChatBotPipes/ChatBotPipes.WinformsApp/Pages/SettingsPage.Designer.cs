@@ -50,7 +50,7 @@ partial class SettingsPage
         apiKeyTextBox.Size = new Size(301, 23);
         apiKeyTextBox.TabIndex = 1;
         apiKeyTextBox.UseSystemPasswordChar = true;
-        apiKeyTextBox.Leave += apiKeyTextBox_Leave;
+        apiKeyTextBox.Leave += ApiKeyTextBox_Leave;
         // 
         // buttonShowApiKey
         // 
@@ -61,7 +61,7 @@ partial class SettingsPage
         buttonShowApiKey.TabIndex = 2;
         buttonShowApiKey.Text = "Show";
         buttonShowApiKey.UseVisualStyleBackColor = true;
-        buttonShowApiKey.Click += buttonShowApiKey_Click;
+        buttonShowApiKey.Click += ButtonShowApiKey_Click;
         // 
         // SettingsPage
         // 
