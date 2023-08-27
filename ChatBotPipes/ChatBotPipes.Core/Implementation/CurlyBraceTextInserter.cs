@@ -8,9 +8,37 @@ using System.Threading.Tasks;
 
 public partial class CurlyBraceTextInserter : ITextInserter
 {
-    public string Insert(string template, string toInsert)
-        => MyRegex().Replace(template, toInsert);
+    private const string _inputGroupName = "input";
+    [GeneratedRegex("{{(?<input>\\w+?)}}")]
+    private static partial Regex CurlyBracesRegex();
 
-    [GeneratedRegex("{{input}}")]
-    private static partial Regex MyRegex();
+    public IEnumerable<string> GetInputs(string template)
+    {
+        var regex = CurlyBracesRegex();
+
+        var inputs = regex.Matches(template)
+            .Select(m => m.Groups[_inputGroupName])
+            .Select(g => g.Value)
+            .ToList();
+
+        return inputs;
+    }
+
+    public string Insert(string template, TaskVariableValueMap toInsert)
+    {
+        var regex = CurlyBracesRegex();
+
+        string result = regex.Replace(template, FindValueFromMapping);
+
+        return result;
+
+        string FindValueFromMapping(Match match)
+        {
+            string inputName = match.Groups[_inputGroupName].Value;
+
+            string value = toInsert.Get(inputName);
+
+            return value;
+        }
+    }
 }

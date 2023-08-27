@@ -34,23 +34,26 @@ partial class PipeTaskTemplateControl
         nameLabel = new Label();
         removeButton = new Button();
         chatBotNameLabel = new Label();
+        inputMappingPanel = new FlowLayoutPanel();
+        label1 = new Label();
+        label2 = new Label();
         SuspendLayout();
         // 
         // insertAboveButton
         // 
         insertAboveButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        insertAboveButton.Location = new Point(231, 3);
+        insertAboveButton.Location = new Point(405, 3);
         insertAboveButton.Name = "insertAboveButton";
-        insertAboveButton.Size = new Size(167, 23);
+        insertAboveButton.Size = new Size(93, 23);
         insertAboveButton.TabIndex = 0;
-        insertAboveButton.Text = "Insert Task Template above";
+        insertAboveButton.Text = "Insert above";
         insertAboveButton.UseVisualStyleBackColor = true;
         insertAboveButton.Click += InsertAboveButton_Click;
         // 
         // moveUpButton
         // 
         moveUpButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        moveUpButton.Location = new Point(404, 3);
+        moveUpButton.Location = new Point(405, 32);
         moveUpButton.Name = "moveUpButton";
         moveUpButton.Size = new Size(93, 23);
         moveUpButton.TabIndex = 1;
@@ -61,7 +64,7 @@ partial class PipeTaskTemplateControl
         // moveDownButton
         // 
         moveDownButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        moveDownButton.Location = new Point(404, 32);
+        moveDownButton.Location = new Point(405, 61);
         moveDownButton.Name = "moveDownButton";
         moveDownButton.Size = new Size(93, 23);
         moveDownButton.TabIndex = 2;
@@ -71,18 +74,19 @@ partial class PipeTaskTemplateControl
         // 
         // nameLabel
         // 
-        nameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        nameLabel.Location = new Point(3, 36);
+        nameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        nameLabel.Location = new Point(50, 4);
         nameLabel.Name = "nameLabel";
-        nameLabel.Size = new Size(395, 19);
+        nameLabel.Size = new Size(253, 22);
         nameLabel.TabIndex = 3;
         nameLabel.Text = "Task template name";
         // 
         // removeButton
         // 
-        removeButton.Location = new Point(3, 3);
+        removeButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        removeButton.Location = new Point(405, 131);
         removeButton.Name = "removeButton";
-        removeButton.Size = new Size(75, 23);
+        removeButton.Size = new Size(93, 23);
         removeButton.TabIndex = 4;
         removeButton.Text = "Remove";
         removeButton.UseVisualStyleBackColor = true;
@@ -91,17 +95,50 @@ partial class PipeTaskTemplateControl
         // chatBotNameLabel
         // 
         chatBotNameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        chatBotNameLabel.Location = new Point(84, 7);
+        chatBotNameLabel.Location = new Point(280, 3);
         chatBotNameLabel.Name = "chatBotNameLabel";
-        chatBotNameLabel.Size = new Size(141, 19);
+        chatBotNameLabel.Size = new Size(119, 19);
         chatBotNameLabel.TabIndex = 5;
         chatBotNameLabel.Text = "Chat bot name";
         chatBotNameLabel.TextAlign = ContentAlignment.TopRight;
+        // 
+        // inputMappingPanel
+        // 
+        inputMappingPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        inputMappingPanel.AutoScroll = true;
+        inputMappingPanel.BackColor = SystemColors.ControlLightLight;
+        inputMappingPanel.BorderStyle = BorderStyle.Fixed3D;
+        inputMappingPanel.Location = new Point(3, 50);
+        inputMappingPanel.Name = "inputMappingPanel";
+        inputMappingPanel.Size = new Size(396, 104);
+        inputMappingPanel.TabIndex = 6;
+        // 
+        // label1
+        // 
+        label1.AutoSize = true;
+        label1.Location = new Point(3, 3);
+        label1.Name = "label1";
+        label1.Size = new Size(32, 15);
+        label1.TabIndex = 7;
+        label1.Text = "Task:";
+        // 
+        // label2
+        // 
+        label2.AutoSize = true;
+        label2.Location = new Point(3, 32);
+        label2.Name = "label2";
+        label2.Size = new Size(94, 15);
+        label2.TabIndex = 8;
+        label2.Text = "Input mappings:";
         // 
         // PipeTaskTemplateControl
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
+        BorderStyle = BorderStyle.FixedSingle;
+        Controls.Add(label2);
+        Controls.Add(label1);
+        Controls.Add(inputMappingPanel);
         Controls.Add(chatBotNameLabel);
         Controls.Add(removeButton);
         Controls.Add(nameLabel);
@@ -109,8 +146,9 @@ partial class PipeTaskTemplateControl
         Controls.Add(moveUpButton);
         Controls.Add(insertAboveButton);
         Name = "PipeTaskTemplateControl";
-        Size = new Size(500, 60);
+        Size = new Size(501, 157);
         ResumeLayout(false);
+        PerformLayout();
     }
 
     #endregion
@@ -121,4 +159,7 @@ partial class PipeTaskTemplateControl
     private Label nameLabel;
     private Button removeButton;
     private Label chatBotNameLabel;
+    private FlowLayoutPanel inputMappingPanel;
+    private Label label1;
+    private Label label2;
 }

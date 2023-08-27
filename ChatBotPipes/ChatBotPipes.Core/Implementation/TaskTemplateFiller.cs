@@ -14,7 +14,24 @@ public class TaskTemplateFiller : ITaskTemplateFiller
         _textInserter = textInserter ?? throw new ArgumentNullException(nameof(textInserter));
     }
 
-    public ChatBotTask FillInput(ChatBotTaskTemplate template, string input)
+    public IEnumerable<string> GetInputs(ChatBotTaskTemplate template)
+    {
+        var allInputs = new HashSet<string>();
+
+        foreach (var message in template.PredefinedInstructions)
+        {
+            var chatMessageInputs = _textInserter.GetInputs(message.Text);
+
+            foreach (var chatMessageInput in chatMessageInputs)
+            {
+                allInputs.Add(chatMessageInput);
+            }
+        }
+
+        return allInputs;
+    }
+
+    public ChatBotTask FillInput(ChatBotTaskTemplate template, TaskVariableValueMap inputs)
     {
         var messagesWithInput = template.PredefinedInstructions
             .Select(WithInput)
@@ -23,6 +40,6 @@ public class TaskTemplateFiller : ITaskTemplateFiller
         return new ChatBotTask(messagesWithInput);
 
         ChatMessage WithInput(ChatMessage message)
-            => message with { Text = _textInserter.Insert(message.Text, input) };
+            => message with { Text = _textInserter.Insert(message.Text, inputs) };
     }
 }

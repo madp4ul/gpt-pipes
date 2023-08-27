@@ -16,49 +16,80 @@ using System.Xml;
 
 public partial class PipeRunnerForm : Form
 {
-    private IChatBotPipeRunner _pipeRunner = null!;
-    private ITaskTemplateFiller _taskTemplateFiller = null!;
+    private readonly IChatBotPipeRunner _pipeRunner = null!;
+    private readonly ITaskTemplateFiller _taskTemplateFiller = null!;
 
     public ChatBotPipe? Pipe { get; private set; }
+
+    private PipeVariableValueMap? _pipeVariableValueMap;
 
     private readonly List<PipeRunnerTaskControl> _pipeRunnerTaskControls = new();
 
     public PipeRunnerForm()
     {
         InitializeComponent();
-    }
 
-    private void PipeRunnerForm_Load(object sender, EventArgs e)
-    {
-        if (DesignMode)
+        if (!DesignMode)
         {
-            return;
+            _pipeRunner = Services.Get<IChatBotPipeRunner>();
+            _taskTemplateFiller = Services.Get<ITaskTemplateFiller>();
         }
-
-        _pipeRunner = Services.Get<IChatBotPipeRunner>();
-        _taskTemplateFiller = Services.Get<ITaskTemplateFiller>();
     }
 
     public void SetPipe(ChatBotPipe pipe)
     {
         Pipe = pipe;
+        _pipeVariableValueMap = new PipeVariableValueMap();
 
         this.Text = $"Run pipe \"{pipe.Name}\"";
         pipeNameLabel.Text = pipe.Name;
 
+        UpdateUserInputControls(pipe);
         CreateTaskControls(pipe);
+    }
+
+    private void UpdateUserInputControls(ChatBotPipe pipe)
+    {
+        foreach (var control in userInputPanel.Controls.OfType<UserPipeInputControl>())
+        {
+            control.UserInputChanged -= UserInputControl_UserInputChanged;
+        }
+
+        userInputPanel.Controls.Clear();
+
+        var inputs = pipe.GetRequiredInputs(_taskTemplateFiller);
+
+        foreach (TaskTemplateVariableName input in inputs)
+        {
+            var userInputControl = new UserPipeInputControl()
+            {
+                Width = userInputPanel.Width - 30
+            };
+
+            userInputControl.SetUserInputName(input);
+            userInputControl.UserInputChanged += UserInputControl_UserInputChanged;
+
+            userInputPanel.Controls.Add(userInputControl);
+        }
+    }
+
+    private void UserInputControl_UserInputChanged(object? sender, UserPipeInputControl.PipeInputChange inputChange)
+    {
+        ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
+
+        _pipeVariableValueMap.AddInputValue(inputChange.InputName, inputChange.UserInputValue);
     }
 
     private void CreateTaskControls(ChatBotPipe pipe)
     {
-        foreach (var task in pipe.Tasks)
+        foreach (var taskMapping in pipe.Tasks)
         {
             var taskControl = new PipeRunnerTaskControl
             {
                 Width = outputPanel.Width - 30
             };
 
-            taskControl.SetTaskTemplate(task);
+            taskControl.SetTaskTemplate(taskMapping.TaskTemplate);
 
             _pipeRunnerTaskControls.Add(taskControl);
             outputPanel.Controls.Add(taskControl);
@@ -68,8 +99,9 @@ public partial class PipeRunnerForm : Form
     private async void RunButton_Click(object sender, EventArgs e)
     {
         ArgumentNullException.ThrowIfNull(Pipe);
+        ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
 
-        var responseEnumerable = _pipeRunner.RunPipeAsync(Pipe, inputTextBox.Text, _taskTemplateFiller);
+        var responseEnumerable = _pipeRunner.RunPipeAsync(Pipe, _pipeVariableValueMap, _taskTemplateFiller);
 
         int index = 0;
         await foreach (var response in responseEnumerable)

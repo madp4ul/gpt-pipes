@@ -28,83 +28,98 @@ partial class PipeRunnerForm
     /// </summary>
     private void InitializeComponent()
     {
-        label1 = new Label();
         pipeNameLabel = new Label();
-        inputTextBox = new TextBox();
         outputPanel = new FlowLayoutPanel();
+        label1 = new Label();
         runButton = new Button();
+        userInputPanel = new FlowLayoutPanel();
+        label2 = new Label();
+        outputPanel.SuspendLayout();
+        userInputPanel.SuspendLayout();
         SuspendLayout();
-        // 
-        // label1
-        // 
-        label1.AutoSize = true;
-        label1.Location = new Point(12, 34);
-        label1.Name = "label1";
-        label1.Size = new Size(35, 15);
-        label1.TabIndex = 0;
-        label1.Text = "Input";
         // 
         // pipeNameLabel
         // 
         pipeNameLabel.AutoSize = true;
-        pipeNameLabel.Location = new Point(53, 9);
+        pipeNameLabel.Location = new Point(15, 9);
         pipeNameLabel.Name = "pipeNameLabel";
         pipeNameLabel.Size = new Size(63, 15);
         pipeNameLabel.TabIndex = 1;
         pipeNameLabel.Text = "Pipe name";
         // 
-        // inputTextBox
-        // 
-        inputTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        inputTextBox.Location = new Point(53, 31);
-        inputTextBox.Multiline = true;
-        inputTextBox.Name = "inputTextBox";
-        inputTextBox.Size = new Size(735, 118);
-        inputTextBox.TabIndex = 2;
-        inputTextBox.Text = "Enter input here";
-        // 
         // outputPanel
         // 
-        outputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        outputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
         outputPanel.AutoScroll = true;
-        outputPanel.Location = new Point(53, 184);
+        outputPanel.Controls.Add(label1);
+        outputPanel.Location = new Point(567, 27);
         outputPanel.Name = "outputPanel";
-        outputPanel.Size = new Size(735, 254);
+        outputPanel.Size = new Size(437, 691);
         outputPanel.TabIndex = 3;
+        // 
+        // label1
+        // 
+        label1.AutoSize = true;
+        label1.Location = new Point(3, 0);
+        label1.Name = "label1";
+        label1.Size = new Size(116, 15);
+        label1.TabIndex = 0;
+        label1.Text = "task output previews";
         // 
         // runButton
         // 
-        runButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        runButton.Location = new Point(713, 155);
+        runButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+        runButton.Location = new Point(472, 695);
         runButton.Name = "runButton";
         runButton.Size = new Size(75, 23);
-        runButton.TabIndex = 4;
+        runButton.TabIndex = 0;
         runButton.Text = "Run";
         runButton.UseVisualStyleBackColor = true;
         runButton.Click += RunButton_Click;
+        // 
+        // userInputPanel
+        // 
+        userInputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        userInputPanel.AutoScroll = true;
+        userInputPanel.Controls.Add(label2);
+        userInputPanel.Location = new Point(12, 27);
+        userInputPanel.Name = "userInputPanel";
+        userInputPanel.Size = new Size(535, 662);
+        userInputPanel.TabIndex = 5;
+        // 
+        // label2
+        // 
+        label2.AutoSize = true;
+        label2.Location = new Point(3, 0);
+        label2.Name = "label2";
+        label2.Size = new Size(89, 15);
+        label2.TabIndex = 0;
+        label2.Text = "Input textboxes";
         // 
         // PipeRunnerForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(800, 450);
+        ClientSize = new Size(1016, 730);
+        Controls.Add(userInputPanel);
         Controls.Add(runButton);
         Controls.Add(outputPanel);
-        Controls.Add(inputTextBox);
         Controls.Add(pipeNameLabel);
-        Controls.Add(label1);
         Name = "PipeRunnerForm";
         Text = "PipeRunnerForm";
-        Load += PipeRunnerForm_Load;
+        outputPanel.ResumeLayout(false);
+        outputPanel.PerformLayout();
+        userInputPanel.ResumeLayout(false);
+        userInputPanel.PerformLayout();
         ResumeLayout(false);
         PerformLayout();
     }
 
     #endregion
-
-    private Label label1;
     private Label pipeNameLabel;
-    private TextBox inputTextBox;
     private FlowLayoutPanel outputPanel;
     private Button runButton;
+    private FlowLayoutPanel userInputPanel;
+    private Label label1;
+    private Label label2;
 }

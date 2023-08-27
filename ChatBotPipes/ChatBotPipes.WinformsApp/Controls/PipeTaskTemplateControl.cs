@@ -15,13 +15,16 @@ using System.Windows.Forms;
 public partial class PipeTaskTemplateControl : UserControl
 {
     private readonly IChatBotProvider _chatBotProvider = null!;
+    private readonly ITaskTemplateFiller _taskTemplateFiller = null!;
 
-    public event EventHandler<ChatBotTaskTemplate>? InsertAboveRequested;
-    public event EventHandler<ChatBotTaskTemplate>? MoveUpRequested;
-    public event EventHandler<ChatBotTaskTemplate>? MoveDownRequested;
-    public event EventHandler<ChatBotTaskTemplate>? RemoveRequested;
+    public event EventHandler<MappedChatBotTaskTemplate>? InsertAboveRequested;
+    public event EventHandler<MappedChatBotTaskTemplate>? MoveUpRequested;
+    public event EventHandler<MappedChatBotTaskTemplate>? MoveDownRequested;
+    public event EventHandler<MappedChatBotTaskTemplate>? RemoveRequested;
+    public event EventHandler<MappedChatBotTaskTemplate>? InputMappingUpdated;
 
-    public ChatBotTaskTemplate? TaskTemplate { get; private set; }
+    public MappedChatBotTaskTemplate? TaskTemplateMapping { get; private set; }
+    public ChatBotPipe? SourcePipe { get; private set; }
 
     public PipeTaskTemplateControl()
     {
@@ -30,42 +33,97 @@ public partial class PipeTaskTemplateControl : UserControl
         if (!DesignMode)
         {
             _chatBotProvider = Services.Get<IChatBotProvider>();
+            _taskTemplateFiller = Services.Get<ITaskTemplateFiller>();
         }
     }
 
-    public void SetTaskTemplate(ChatBotTaskTemplate taskTemplate)
+    public void SetTaskTemplate(MappedChatBotTaskTemplate taskTemplateMapping, ChatBotPipe sourcePipe)
     {
-        TaskTemplate = taskTemplate;
+        TaskTemplateMapping = taskTemplateMapping;
+        SourcePipe = sourcePipe;
 
-        nameLabel.Text = taskTemplate.Name;
-        chatBotNameLabel.Text = taskTemplate.ChatBotName ?? $"{_chatBotProvider.GetDefaultBotName()} (default)";
+        nameLabel.Text = taskTemplateMapping.TaskTemplate.Name;
+        chatBotNameLabel.Text = !string.IsNullOrEmpty(taskTemplateMapping.TaskTemplate.ChatBotName)
+            ? taskTemplateMapping.TaskTemplate.ChatBotName
+            : $"{_chatBotProvider.GetDefaultBotName()} (default)";
+
+        UpdateInputMappingControls(taskTemplateMapping, sourcePipe);
+    }
+
+    private void UpdateInputMappingControls(MappedChatBotTaskTemplate taskTemplateMapping, ChatBotPipe sourcePipe)
+    {
+        foreach (var control in inputMappingPanel.Controls.OfType<PipeInputMappingControl>())
+        {
+            control.InputMappingChanged -= Control_InputMappingChanged;
+        }
+
+        inputMappingPanel.Controls.Clear();
+
+        var inputs = _taskTemplateFiller.GetInputs(taskTemplateMapping.TaskTemplate);
+
+        foreach (var input in inputs)
+        {
+            var control = new PipeInputMappingControl()
+            {
+                Width = inputMappingPanel.Width - 30
+            };
+
+            var variableReference = taskTemplateMapping.InputMapping.GetValueOrDefault(input);
+
+            var data = new PipeInputMappingControl.PipeInputMappingControlData(input, variableReference, taskTemplateMapping, sourcePipe);
+
+            control.SetData(data);
+
+            control.InputMappingChanged += Control_InputMappingChanged;
+
+            inputMappingPanel.Controls.Add(control);
+        }
+    }
+
+    private void Control_InputMappingChanged(object? sender, PipeInputMappingControl.InputMappingChange mapping)
+    {
+        ArgumentNullException.ThrowIfNull(TaskTemplateMapping);
+        ArgumentNullException.ThrowIfNull(SourcePipe);
+
+        if (mapping.VariableReference is null)
+        {
+            TaskTemplateMapping.InputMapping.Remove(mapping.InputName);
+        }
+        else
+        {
+            TaskTemplateMapping.InputMapping[mapping.InputName] = mapping.VariableReference;
+        }
+
+        UpdateInputMappingControls(TaskTemplateMapping, SourcePipe);
+
+        InputMappingUpdated?.Invoke(this, TaskTemplateMapping);
     }
 
     private void InsertAboveButton_Click(object sender, EventArgs e)
     {
-        ArgumentNullException.ThrowIfNull(TaskTemplate);
+        ArgumentNullException.ThrowIfNull(TaskTemplateMapping);
 
-        InsertAboveRequested?.Invoke(this, TaskTemplate);
+        InsertAboveRequested?.Invoke(this, TaskTemplateMapping);
     }
 
     private void MoveUpButton_Click(object sender, EventArgs e)
     {
-        ArgumentNullException.ThrowIfNull(TaskTemplate);
+        ArgumentNullException.ThrowIfNull(TaskTemplateMapping);
 
-        MoveUpRequested?.Invoke(this, TaskTemplate);
+        MoveUpRequested?.Invoke(this, TaskTemplateMapping);
     }
 
     private void MoveDownButton_Click(object sender, EventArgs e)
     {
-        ArgumentNullException.ThrowIfNull(TaskTemplate);
+        ArgumentNullException.ThrowIfNull(TaskTemplateMapping);
 
-        MoveDownRequested?.Invoke(this, TaskTemplate);
+        MoveDownRequested?.Invoke(this, TaskTemplateMapping);
     }
 
     private void RemoveButton_Click(object sender, EventArgs e)
     {
-        ArgumentNullException.ThrowIfNull(TaskTemplate);
+        ArgumentNullException.ThrowIfNull(TaskTemplateMapping);
 
-        RemoveRequested?.Invoke(this, TaskTemplate);
+        RemoveRequested?.Invoke(this, TaskTemplateMapping);
     }
 }

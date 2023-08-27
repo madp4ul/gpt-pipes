@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 public interface IChatBotPipeRunner
 {
-    IAsyncEnumerable<IChatBotResponse> RunPipeAsync(ChatBotPipe pipe, string input, ITaskTemplateFiller taskTemplateFiller);
+    IAsyncEnumerable<IChatBotResponse> RunPipeAsync(ChatBotPipe pipe, PipeVariableValueMap userInputs, ITaskTemplateFiller taskTemplateFiller);
 }

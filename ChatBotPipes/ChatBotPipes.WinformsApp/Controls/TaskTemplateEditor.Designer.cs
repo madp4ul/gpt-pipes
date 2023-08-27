@@ -35,6 +35,8 @@ partial class TaskTemplateEditor
         chatMessagePanel = new Panel();
         runButton = new Button();
         chatBotSelectionComboBox = new ComboBox();
+        label2 = new Label();
+        inputListLabel = new Label();
         SuspendLayout();
         // 
         // label1
@@ -80,10 +82,10 @@ partial class TaskTemplateEditor
         // 
         chatMessagePanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         chatMessagePanel.AutoScroll = true;
-        chatMessagePanel.Location = new Point(3, 37);
+        chatMessagePanel.Location = new Point(3, 60);
         chatMessagePanel.Margin = new Padding(0);
         chatMessagePanel.Name = "chatMessagePanel";
-        chatMessagePanel.Size = new Size(518, 292);
+        chatMessagePanel.Size = new Size(518, 269);
         chatMessagePanel.TabIndex = 8;
         // 
         // runButton
@@ -106,10 +108,30 @@ partial class TaskTemplateEditor
         chatBotSelectionComboBox.TabIndex = 10;
         chatBotSelectionComboBox.SelectedIndexChanged += ChatBotSelectionComboBox_SelectedIndexChanged;
         // 
+        // label2
+        // 
+        label2.AutoSize = true;
+        label2.Location = new Point(4, 35);
+        label2.Name = "label2";
+        label2.Size = new Size(43, 15);
+        label2.TabIndex = 11;
+        label2.Text = "Inputs:";
+        // 
+        // inputListLabel
+        // 
+        inputListLabel.AutoSize = true;
+        inputListLabel.Location = new Point(50, 35);
+        inputListLabel.Name = "inputListLabel";
+        inputListLabel.Size = new Size(53, 15);
+        inputListLabel.TabIndex = 12;
+        inputListLabel.Text = "Input list";
+        // 
         // TaskTemplateEditor
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
+        Controls.Add(inputListLabel);
+        Controls.Add(label2);
         Controls.Add(chatBotSelectionComboBox);
         Controls.Add(runButton);
         Controls.Add(chatMessagePanel);
@@ -132,4 +154,6 @@ partial class TaskTemplateEditor
     private Panel chatMessagePanel;
     private Button runButton;
     private ComboBox chatBotSelectionComboBox;
+    private Label label2;
+    private Label inputListLabel;
 }

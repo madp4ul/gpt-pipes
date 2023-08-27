@@ -1,6 +1,6 @@
 ﻿namespace ChatBotPipes.WinformsApp.Controls;
 
-partial class OutputTextBox
+partial class UserPipeInputControl
 {
     /// <summary> 
     /// Erforderliche Designervariable.
@@ -28,44 +28,29 @@ partial class OutputTextBox
     /// </summary>
     private void InitializeComponent()
     {
-        textBox = new TextBox();
-        label1 = new Label();
+        userTaskInputControl = new UserTaskInputControl();
         SuspendLayout();
         // 
-        // textBox
+        // userTaskInputControl
         // 
-        textBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        textBox.Location = new Point(51, 0);
-        textBox.Multiline = true;
-        textBox.Name = "textBox";
-        textBox.ReadOnly = true;
-        textBox.ScrollBars = ScrollBars.Vertical;
-        textBox.Size = new Size(224, 157);
-        textBox.TabIndex = 0;
+        userTaskInputControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        userTaskInputControl.Location = new Point(3, 3);
+        userTaskInputControl.Name = "userTaskInputControl";
+        userTaskInputControl.Size = new Size(438, 229);
+        userTaskInputControl.TabIndex = 0;
+        userTaskInputControl.UserInputChanged += UserTaskInputControl_UserInputChanged;
         // 
-        // label1
-        // 
-        label1.AutoSize = true;
-        label1.Location = new Point(0, 3);
-        label1.Name = "label1";
-        label1.Size = new Size(45, 15);
-        label1.TabIndex = 1;
-        label1.Text = "Output";
-        // 
-        // OutputTextBox
+        // UserPipeInputControl
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(label1);
-        Controls.Add(textBox);
-        Name = "OutputTextBox";
-        Size = new Size(275, 157);
+        Controls.Add(userTaskInputControl);
+        Name = "UserPipeInputControl";
+        Size = new Size(444, 235);
         ResumeLayout(false);
-        PerformLayout();
     }
 
     #endregion
 
-    private TextBox textBox;
-    private Label label1;
+    private UserTaskInputControl userTaskInputControl;
 }

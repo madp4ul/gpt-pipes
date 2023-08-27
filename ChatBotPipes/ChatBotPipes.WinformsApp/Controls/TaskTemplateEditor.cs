@@ -2,6 +2,7 @@
 
 using ChatBotPipes.Client.Implementation;
 using ChatBotPipes.Core;
+using ChatBotPipes.Core.Implementation;
 using ChatBotPipes.WinformsApp.Forms;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ using System.Windows.Forms;
 public partial class TaskTemplateEditor : UserControl
 {
     private readonly IChatBotProvider _chatBotProvider = null!;
+    private readonly ITaskTemplateFiller _taskTemplateFiller = null!;
 
     public event EventHandler<ChatBotTaskTemplate>? TaskTemplateUpdated;
 
@@ -44,6 +46,7 @@ public partial class TaskTemplateEditor : UserControl
         if (!DesignMode)
         {
             _chatBotProvider = Services.Get<IChatBotProvider>();
+            _taskTemplateFiller = Services.Get<ITaskTemplateFiller>();
 
             chatBotSelectionComboBox.Items.Clear();
             chatBotSelectionComboBox.Items.AddRange(_chatBotProvider.GetBotNames().Prepend("").ToArray());
@@ -70,6 +73,7 @@ public partial class TaskTemplateEditor : UserControl
         taskTemplateNameTextBox.Text = taskTemplate.Name;
 
         UpdateComboBoxFromChatBotName(taskTemplate);
+        UpdateInputListLabel(taskTemplate);
 
         foreach (var chatMessageControl in chatMessagePanel.Controls.OfType<ChatMessageControl>())
         {
@@ -119,10 +123,14 @@ public partial class TaskTemplateEditor : UserControl
 
     private void ChatMessageControl_MessageUpdated(object? sender, EventArgs e)
     {
-        UpdateTaskTemplate(_ =>
-        {
-            // chat message is already modifed, nothing else to do
-        });
+        UpdateTaskTemplate(UpdateInputListLabel);
+    }
+
+    private void UpdateInputListLabel(ChatBotTaskTemplate template)
+    {
+        var inputs = _taskTemplateFiller.GetInputs(template);
+
+        inputListLabel.Text = string.Join(", ", inputs);
     }
 
     private void ChatMessageControl_MessageDeleted(object? sender, EventArgs e)

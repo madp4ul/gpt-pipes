@@ -9,5 +9,8 @@ using System.Threading.Tasks;
 
 public interface ITaskTemplateFiller
 {
-    ChatBotTask FillInput(ChatBotTaskTemplate template, string input);
+    IEnumerable<string> GetInputs(ChatBotTaskTemplate template);
+
+    ChatBotTask FillInput(ChatBotTaskTemplate template, TaskVariableValueMap inputs);
+
 }

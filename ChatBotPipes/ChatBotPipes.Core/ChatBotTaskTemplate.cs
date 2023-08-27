@@ -26,4 +26,13 @@ public record ChatBotTaskTemplate
     public ChatBotTaskTemplate()
         : this(new List<ChatMessage>(), "", null, Guid.Empty)
     { }
+
+    public IEnumerable<string> GetReferencibleVariableNames(ITaskTemplateFiller templateFiller)
+    {
+        var inputs = templateFiller.GetInputs(this);
+
+        var allVariables = inputs.Append(TaskVariableValueMap.OutputKey);
+
+        return allVariables;
+    }
 }

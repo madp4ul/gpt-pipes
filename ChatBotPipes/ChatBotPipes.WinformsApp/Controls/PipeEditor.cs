@@ -42,7 +42,7 @@ public partial class PipeEditor : UserControl
 
         foreach (var taskTemplate in pipe.Tasks)
         {
-            taskTemplatePanel.Controls.Add(CreateTaskTemplateControl(taskTemplate));
+            taskTemplatePanel.Controls.Add(CreateTaskTemplateControl(taskTemplate, pipe));
         }
     }
 
@@ -83,9 +83,11 @@ public partial class PipeEditor : UserControl
         {
             if (TrySelectTaskTemplate(out var taskTemplate))
             {
-                pipe.Tasks.Add(taskTemplate);
+                var taskTemplateMapping = new MappedChatBotTaskTemplate(taskTemplate, new Dictionary<string, TaskTemplateVariableName>());
 
-                var control = CreateTaskTemplateControl(taskTemplate);
+                pipe.Tasks.Add(taskTemplateMapping);
+
+                var control = CreateTaskTemplateControl(taskTemplateMapping, pipe);
                 taskTemplatePanel.Controls.Add(control);
             }
         });
@@ -107,21 +109,33 @@ public partial class PipeEditor : UserControl
         return false;
     }
 
-    private PipeTaskTemplateControl CreateTaskTemplateControl(ChatBotTaskTemplate taskTemplate)
+    private PipeTaskTemplateControl CreateTaskTemplateControl(MappedChatBotTaskTemplate taskTemplate, ChatBotPipe sourcePipe)
     {
-        var control = new PipeTaskTemplateControl();
+        var control = new PipeTaskTemplateControl()
+        {
+            Width = taskTemplatePanel.Width - 30,
+        };
 
-        control.SetTaskTemplate(taskTemplate);
+        control.SetTaskTemplate(taskTemplate, sourcePipe);
 
         control.InsertAboveRequested += Control_InsertAboveRequested;
         control.MoveUpRequested += Control_MoveUpRequested;
         control.MoveDownRequested += Control_MoveDownRequested;
         control.RemoveRequested += Control_RemoveRequested;
+        control.InputMappingUpdated += Control_InputMappingUpdated;
 
         return control;
     }
 
-    private void Control_MoveUpRequested(object? sender, ChatBotTaskTemplate currentTaskTemplate)
+    private void Control_InputMappingUpdated(object? sender, MappedChatBotTaskTemplate e)
+    {
+        UpdatePipe(pipe =>
+        {
+            // pipe is already updated, nothing additional to be done.
+        });
+    }
+
+    private void Control_MoveUpRequested(object? sender, MappedChatBotTaskTemplate currentTaskTemplate)
     {
         UpdatePipe(pipe =>
         {
@@ -140,7 +154,7 @@ public partial class PipeEditor : UserControl
         });
     }
 
-    private void Control_MoveDownRequested(object? sender, ChatBotTaskTemplate currentTaskTemplate)
+    private void Control_MoveDownRequested(object? sender, MappedChatBotTaskTemplate currentTaskTemplate)
     {
         UpdatePipe(pipe =>
         {
@@ -159,7 +173,7 @@ public partial class PipeEditor : UserControl
         });
     }
 
-    private void Control_InsertAboveRequested(object? sender, ChatBotTaskTemplate currentTaskTemplate)
+    private void Control_InsertAboveRequested(object? sender, MappedChatBotTaskTemplate currentTaskTemplate)
     {
         UpdatePipe(pipe =>
         {
@@ -167,16 +181,18 @@ public partial class PipeEditor : UserControl
 
             if (TrySelectTaskTemplate(out var selectedTaskTemplate))
             {
-                pipe.Tasks.Insert(index, selectedTaskTemplate);
+                var taskTemplateMapping = new MappedChatBotTaskTemplate(selectedTaskTemplate, new Dictionary<string, TaskTemplateVariableName>());
 
-                var control = CreateTaskTemplateControl(selectedTaskTemplate);
+                pipe.Tasks.Insert(index, taskTemplateMapping);
+
+                var control = CreateTaskTemplateControl(taskTemplateMapping, pipe);
                 taskTemplatePanel.Controls.Add(control);
                 taskTemplatePanel.Controls.SetChildIndex(control, index);
             }
         });
     }
 
-    private void Control_RemoveRequested(object? sender, ChatBotTaskTemplate currentTaskTemplate)
+    private void Control_RemoveRequested(object? sender, MappedChatBotTaskTemplate currentTaskTemplate)
     {
         UpdatePipe(pipe =>
         {

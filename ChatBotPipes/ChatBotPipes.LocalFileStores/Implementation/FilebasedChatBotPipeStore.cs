@@ -55,15 +55,34 @@ public class FilebasedChatBotPipeStore : IChatBotPipeStore
                 continue;
             }
 
-            var pipeTaskTemplates = pipe.TaskTemplatesIds
-                .Where(id => allTaskTemplates.ContainsKey(id.Id)) // filter out references to deleted templates.
-                .Select(id => allTaskTemplates[id.Id])
-                .ToList();
-
-            result.Add(new ChatBotPipe(pipeTaskTemplates, pipe.Name, pipe.Id));
+            result.Add(FromStored(pipe, allTaskTemplates));
         }
 
         return result;
+    }
+
+    private ChatBotPipe FromStored(StoredPipe storedPipe, Dictionary<Guid, ChatBotTaskTemplate> allTaskTemplates)
+    {
+        var tasks = storedPipe.Tasks
+            .Select(FromStored)
+            .OfType<MappedChatBotTaskTemplate>()
+            .ToList();
+
+        return new ChatBotPipe(tasks, storedPipe.Name, storedPipe.Id);
+
+        MappedChatBotTaskTemplate? FromStored(StoredMappedChatBotTaskTemplate storedTaskTemplate)
+        {
+            if (!allTaskTemplates.TryGetValue(storedTaskTemplate.TaskTemplate.Id, out ChatBotTaskTemplate? taskTemplate))
+            {
+                return null;
+            }
+
+            var inputMappings = storedTaskTemplate.InputMapping
+                .Where(kv => allTaskTemplates.ContainsKey(kv.Value.TaskTemplate.Id))
+                .ToDictionary(kv => kv.Key, kv => new TaskTemplateVariableName(allTaskTemplates[kv.Value.TaskTemplate.Id], kv.Value.InputName));
+
+            return new MappedChatBotTaskTemplate(taskTemplate, inputMappings);
+        }
     }
 
     public async Task AddPipeAsync(User user, ChatBotPipe pipe)
@@ -88,15 +107,27 @@ public class FilebasedChatBotPipeStore : IChatBotPipeStore
 
         var path = GetFilePath(pipe);
 
-        var storedTaskTemplateReferences = pipe.Tasks
-            .Select(t => new TaskTemplateReference(t.Id))
+        var storedMappedTaskTemplateReferences = pipe.Tasks
+            .Select(ToStoredTask)
             .ToList();
 
-        var storedPipe = new StoredPipe(pipe.Id, pipe.Name, storedTaskTemplateReferences);
+        var storedPipe = new StoredPipe(pipe.Id, pipe.Name, storedMappedTaskTemplateReferences);
 
         var fileContent = JsonSerializer.Serialize(storedPipe);
 
         await _userDataFileService.WriteFileAsync(path, fileContent);
+
+        static StoredMappedChatBotTaskTemplate ToStoredTask(MappedChatBotTaskTemplate mappedTaskTemplate)
+        {
+            var reference = new TaskTemplateReference(mappedTaskTemplate.TaskTemplate.Id);
+            var inputMapping = mappedTaskTemplate.InputMapping
+                .ToDictionary(kv => kv.Key, kv => ToStoredTaskTemplateVariableName(kv.Value));
+
+            return new StoredMappedChatBotTaskTemplate(reference, inputMapping);
+
+            static StoredTaskTemplateVariableName ToStoredTaskTemplateVariableName(TaskTemplateVariableName variableName)
+                => new(new TaskTemplateReference(variableName.TaskTemplate.Id), variableName.InputName);
+        }
     }
 
     private async Task ThrowIfNotCurrentUserAsync(User user)
@@ -112,6 +143,14 @@ public class FilebasedChatBotPipeStore : IChatBotPipeStore
     private static string GetFilePath(ChatBotPipe pipe)
         => Path.Combine(_pipesDirectory, $"pipe_{pipe.Id}");
 
+    // have one counter part to each class that participates in defining the pipe.
+    // The difference here is, that instead of references to the real task templates, it only stored the guid.
+
+    private record StoredPipe(Guid Id, string Name, List<StoredMappedChatBotTaskTemplate> Tasks);
+
+    private record StoredMappedChatBotTaskTemplate(TaskTemplateReference TaskTemplate, Dictionary<string, StoredTaskTemplateVariableName> InputMapping);
+
+    private record StoredTaskTemplateVariableName(TaskTemplateReference TaskTemplate, string InputName);
+
     private record TaskTemplateReference(Guid Id);
-    private record StoredPipe(Guid Id, string Name, List<TaskTemplateReference> TaskTemplatesIds);
 }

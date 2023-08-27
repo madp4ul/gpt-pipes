@@ -62,7 +62,14 @@ public partial class PipeManagementPage : UserControl
             await AddTaskTemplateAsync();
         }
 
+        var selectedIndex = pipesListBox.SelectedIndex;
+
         UpdatePipeList();
+
+        if (selectedIndex >= 0)
+        {
+            pipesListBox.SetSelected(selectedIndex, true);
+        }
 
         UpdatePipeEditor();
     }
@@ -75,7 +82,7 @@ public partial class PipeManagementPage : UserControl
     private async Task AddTaskTemplateAsync()
     {
         var newPipe = new ChatBotPipe(
-            new List<ChatBotTaskTemplate> { },
+            new List<MappedChatBotTaskTemplate> { },
             "New Pipe");
 
         await _chatBotPipeStore.AddPipeAsync(AppUser.Default, newPipe);
