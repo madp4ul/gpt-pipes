@@ -35,7 +35,7 @@ public partial class PipeInputMappingControl : UserControl
     {
         Data = data;
 
-        inputNameLabel.Text = data.InputName;
+        inputNameLabel.Text = data.InputName + ":";
         variableReferenceLabel.Text = GetVariableReferenceDescription(data.VariableReference);
 
     }

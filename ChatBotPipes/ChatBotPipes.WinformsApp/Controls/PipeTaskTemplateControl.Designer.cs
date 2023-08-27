@@ -75,6 +75,7 @@ partial class PipeTaskTemplateControl
         // nameLabel
         // 
         nameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        nameLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point);
         nameLabel.Location = new Point(50, 4);
         nameLabel.Name = "nameLabel";
         nameLabel.Size = new Size(253, 22);
@@ -116,9 +117,9 @@ partial class PipeTaskTemplateControl
         label2.AutoSize = true;
         label2.Location = new Point(3, 32);
         label2.Name = "label2";
-        label2.Size = new Size(94, 15);
+        label2.Size = new Size(43, 15);
         label2.TabIndex = 8;
-        label2.Text = "Input mappings:";
+        label2.Text = "Inputs:";
         // 
         // inputMappingPanel
         // 

@@ -38,25 +38,27 @@ partial class PipeInputMappingControl
         inputNameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
         inputNameLabel.Location = new Point(0, 0);
         inputNameLabel.Name = "inputNameLabel";
-        inputNameLabel.Size = new Size(80, 23);
+        inputNameLabel.Size = new Size(95, 31);
         inputNameLabel.TabIndex = 0;
         inputNameLabel.Text = "Input name";
+        inputNameLabel.TextAlign = ContentAlignment.MiddleRight;
         // 
         // variableReferenceLabel
         // 
         variableReferenceLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        variableReferenceLabel.Location = new Point(77, 0);
+        variableReferenceLabel.Location = new Point(101, 0);
         variableReferenceLabel.Name = "variableReferenceLabel";
-        variableReferenceLabel.Size = new Size(161, 23);
+        variableReferenceLabel.Size = new Size(226, 31);
         variableReferenceLabel.TabIndex = 1;
         variableReferenceLabel.Text = "Variable reference description";
+        variableReferenceLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // updateVariableReferenceButton
         // 
         updateVariableReferenceButton.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-        updateVariableReferenceButton.Location = new Point(244, 0);
+        updateVariableReferenceButton.Location = new Point(333, 0);
         updateVariableReferenceButton.Name = "updateVariableReferenceButton";
-        updateVariableReferenceButton.Size = new Size(58, 23);
+        updateVariableReferenceButton.Size = new Size(58, 31);
         updateVariableReferenceButton.TabIndex = 2;
         updateVariableReferenceButton.Text = "Update";
         updateVariableReferenceButton.UseVisualStyleBackColor = true;
@@ -70,7 +72,7 @@ partial class PipeInputMappingControl
         Controls.Add(variableReferenceLabel);
         Controls.Add(inputNameLabel);
         Name = "PipeInputMappingControl";
-        Size = new Size(302, 23);
+        Size = new Size(391, 31);
         ResumeLayout(false);
     }
 
