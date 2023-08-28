@@ -1,8 +1,8 @@
 ﻿namespace ChatBotPipes.WinformsApp.Pages;
 
+using ChatBotPipes.Client;
 using ChatBotPipes.Client.Implementation;
 using ChatBotPipes.Core;
-using ChatBotPipes.Server;
 using ChatBotPipes.WinformsApp.Controls;
 using System;
 using System.Collections.Generic;

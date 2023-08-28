@@ -24,7 +24,6 @@
 		<ProjectReference Include="..\ChatBotPipes.Client\ChatBotPipes.Client.csproj" />
 		<ProjectReference Include="..\ChatBotPipes.Core\ChatBotPipes.Core.csproj" />
 		<ProjectReference Include="..\ChatBotPipes.LocalFileStores\ChatBotPipes.LocalFileStores.csproj" />
-		<ProjectReference Include="..\ChatBotPipes.Server\ChatBotPipes.Server.csproj" />
 	</ItemGroup>
 
 </Project>

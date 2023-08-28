@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotPipes.WinformsApp", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotPipes.Client", "ChatBotPipes.Client\ChatBotPipes.Client.csproj", "{06E72745-513A-40E9-809A-6D733B09219A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotPipes.Server", "ChatBotPipes.Server\ChatBotPipes.Server.csproj", "{6110437E-38D3-4F54-A9F3-AD603E98288C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotPipes.LocalFileStores", "ChatBotPipes.LocalFileStores\ChatBotPipes.LocalFileStores.csproj", "{C4706366-E415-4FD9-BC1B-51EA2CBF6B2F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotPipes.ChatGPTBot", "ChatBotPipes.ChatGPTBot\ChatBotPipes.ChatGPTBot.csproj", "{2AA081E3-594C-453B-9515-342EC7E05F45}"
@@ -33,10 +31,6 @@ Global
 		{06E72745-513A-40E9-809A-6D733B09219A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06E72745-513A-40E9-809A-6D733B09219A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06E72745-513A-40E9-809A-6D733B09219A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6110437E-38D3-4F54-A9F3-AD603E98288C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6110437E-38D3-4F54-A9F3-AD603E98288C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6110437E-38D3-4F54-A9F3-AD603E98288C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6110437E-38D3-4F54-A9F3-AD603E98288C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4706366-E415-4FD9-BC1B-51EA2CBF6B2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4706366-E415-4FD9-BC1B-51EA2CBF6B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4706366-E415-4FD9-BC1B-51EA2CBF6B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
