@@ -50,6 +50,9 @@ public class TaskVariableValueMap
         return "";
     }
 
+    public bool Has(string key)
+        => _mapping.ContainsKey(key);
+
     public TaskVariableValueMap CopyMap()
     {
         var copy = new TaskVariableValueMap();

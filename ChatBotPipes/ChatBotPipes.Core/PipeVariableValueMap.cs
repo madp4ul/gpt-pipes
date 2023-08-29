@@ -45,6 +45,9 @@ public class PipeVariableValueMap
     public string Get(TaskTemplateVariableName taskTemplateVariable)
         => Get(taskTemplateVariable.TaskTemplate).Get(taskTemplateVariable.InputName);
 
+    public bool Has(TaskTemplateVariableName taskTemplateVariable)
+        => Get(taskTemplateVariable.TaskTemplate).Has(taskTemplateVariable.InputName);
+
     public PipeVariableValueMap CopyMap()
     {
         var copy = new PipeVariableValueMap();

@@ -23,7 +23,7 @@ public partial class PipeRunnerForm : Form
 
     private PipeVariableValueMap? _pipeVariableValueMap;
 
-    private readonly List<PipeRunnerTaskControl> _pipeRunnerTaskControls = new();
+    private readonly Dictionary<MappedChatBotTaskTemplate, PipeRunnerTaskControl> _pipeRunnerTaskControls = new();
 
     public PipeRunnerForm()
     {
@@ -85,7 +85,7 @@ public partial class PipeRunnerForm : Form
 
             taskControl.SetTaskTemplate(taskMapping.TaskTemplate);
 
-            _pipeRunnerTaskControls.Add(taskControl);
+            _pipeRunnerTaskControls.Add(taskMapping, taskControl);
             outputPanel.AddRow(taskControl);
         }
     }
@@ -98,11 +98,11 @@ public partial class PipeRunnerForm : Form
         var responseEnumerable = _pipeRunner.RunPipeAsync(Pipe, _pipeVariableValueMap, _taskTemplateFiller);
 
         int index = 0;
-        await foreach (var response in responseEnumerable)
+        await foreach (var pipeResponse in responseEnumerable)
         {
-            var control = _pipeRunnerTaskControls[index];
+            var control = _pipeRunnerTaskControls[pipeResponse.Task];
 
-            await control.UpdateFromChatbotResponseAsync(response);
+            await control.UpdateFromChatbotResponseAsync(pipeResponse.Response);
 
             index++;
         }
