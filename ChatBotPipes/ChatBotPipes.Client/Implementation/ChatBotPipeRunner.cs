@@ -4,6 +4,7 @@ using ChatBotPipes.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,15 +17,15 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
         _taskRunner = taskRunner ?? throw new ArgumentNullException(nameof(taskRunner));
     }
 
-    public IAsyncEnumerable<ChatBotPipeResponse> RunPipeAsync(ChatBotPipe pipe, PipeVariableValueMap userInputs, ITaskTemplateFiller taskTemplateFiller)
+    public IAsyncEnumerable<ChatBotPipeResponse> RunPipeAsync(ChatBotPipe pipe, PipeVariableValueMap userInputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default)
     {
         var variableValues = userInputs.CopyMap(); // Copy to not modify users instance of their inputs.
 
         // If problems with parallelized running occur, switch back to sequencial approach.
-        return RunPipeParallelizedAsync(pipe, variableValues, taskTemplateFiller);
+        return RunPipeParallelizedAsync(pipe, variableValues, taskTemplateFiller, cancellationToken);
     }
 
-    private async IAsyncEnumerable<ChatBotPipeResponse> RunPipeParallelizedAsync(ChatBotPipe pipe, PipeVariableValueMap variableValues, ITaskTemplateFiller taskTemplateFiller)
+    private async IAsyncEnumerable<ChatBotPipeResponse> RunPipeParallelizedAsync(ChatBotPipe pipe, PipeVariableValueMap variableValues, ITaskTemplateFiller taskTemplateFiller, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         List<MappedChatBotTaskTemplate> tasksWithMissingInputs = pipe.Tasks.ToList();
 
@@ -32,6 +33,8 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
 
         while (tasksWithMissingInputs.Count > 0 || runningTasks.Count > 0)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var readyTaskUsages = tasksWithMissingInputs
                 .Where(t => HasAllInputsProvided(variableValues, t))
                 .ToList();
@@ -44,6 +47,8 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
             runningTasks.AddRange(newReadyChatBotTasks);
 
             var completedTask = await Task.WhenAny(runningTasks);
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             runningTasks.Remove(completedTask);
 
@@ -61,7 +66,7 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
         {
             TaskVariableValueMap taskVariableValues = GetTaskVariableValues(variableValues, taskTemplateUsage);
 
-            var response = await _taskRunner.RunTaskAsync(taskTemplateUsage.TaskTemplate, taskVariableValues, taskTemplateFiller);
+            var response = await _taskRunner.RunTaskAsync(taskTemplateUsage.TaskTemplate, taskVariableValues, taskTemplateFiller, cancellationToken);
 
             return new ChatBotPipeResponse(taskTemplateUsage, response);
         }
@@ -76,7 +81,7 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
         }
     }
 
-    public async IAsyncEnumerable<ChatBotPipeResponse> RunPipeSequenciallyAsync(ChatBotPipe pipe, PipeVariableValueMap userInputs, ITaskTemplateFiller taskTemplateFiller)
+    public async IAsyncEnumerable<ChatBotPipeResponse> RunPipeSequenciallyAsync(ChatBotPipe pipe, PipeVariableValueMap userInputs, ITaskTemplateFiller taskTemplateFiller, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var variableValues = userInputs.CopyMap(); // Copy to not modify users instance of their inputs.
 
@@ -84,7 +89,7 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
         {
             TaskVariableValueMap taskVariableValues = GetTaskVariableValues(variableValues, task);
 
-            var response = await _taskRunner.RunTaskAsync(task.TaskTemplate, taskVariableValues, taskTemplateFiller);
+            var response = await _taskRunner.RunTaskAsync(task.TaskTemplate, taskVariableValues, taskTemplateFiller, cancellationToken);
 
             yield return new ChatBotPipeResponse(task, response);
 

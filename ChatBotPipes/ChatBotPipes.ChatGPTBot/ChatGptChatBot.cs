@@ -22,7 +22,7 @@ public class ChatGptChatBot : IChatBot
         _api = new OpenAI_API.OpenAIAPI();
     }
 
-    public async Task<IChatBotResponse> RespondAsync(ChatBotTask task)
+    public async Task<IChatBotResponse> RespondAsync(ChatBotTask task, CancellationToken cancellationToken = default)
     {
         await SetAuthenticationAsync();
 
@@ -30,23 +30,32 @@ public class ChatGptChatBot : IChatBot
 
         var response = new ChatBotResponse(syncContext);
 
-        _ = Task.Run(async () => await StreamResponseUpdatesAsync(task, response));
+        _ = Task.Run(async () => await StreamResponseUpdatesAsync(task, response, cancellationToken), CancellationToken.None); // cancel method inside instead of whole thread
 
         return response;
     }
 
-    private async Task StreamResponseUpdatesAsync(ChatBotTask task, ChatBotResponse chatBotResponse)
+    private async Task StreamResponseUpdatesAsync(ChatBotTask task, ChatBotResponse chatBotResponse, CancellationToken cancellationToken = default)
     {
-        Conversation conversation = CreateConversation(task);
-
-        var responseEnumerable = conversation.StreamResponseEnumerableFromChatbotAsync();
-
-        await foreach (string update in responseEnumerable)
+        try
         {
-            chatBotResponse.AppendData(update);
-        }
+            Conversation conversation = CreateConversation(task);
 
-        chatBotResponse.MarkAsComplete();
+            var responseEnumerable = conversation.StreamResponseEnumerableFromChatbotAsync(cancellationToken);
+
+            await foreach (string update in responseEnumerable)
+            {
+                chatBotResponse.AppendData(update);
+            }
+
+            chatBotResponse.MarkAsComplete();
+        }
+        catch (OperationCanceledException)
+        {
+            chatBotResponse.MarkAsCancelled();
+
+            throw;
+        }
     }
 
     private Conversation CreateConversation(ChatBotTask task)

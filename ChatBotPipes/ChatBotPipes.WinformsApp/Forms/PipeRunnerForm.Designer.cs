@@ -33,6 +33,7 @@ partial class PipeRunnerForm
         splitContainer = new SplitContainer();
         userInputPanel = new Controls.AutoTopDownLayoutControl();
         outputPanel = new Controls.AutoTopDownLayoutControl();
+        cancelButton = new Button();
         ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
         splitContainer.Panel1.SuspendLayout();
         splitContainer.Panel2.SuspendLayout();
@@ -44,7 +45,7 @@ partial class PipeRunnerForm
         pipeNameLabel.AutoSize = true;
         pipeNameLabel.Location = new Point(3, 0);
         pipeNameLabel.Name = "pipeNameLabel";
-        pipeNameLabel.Size = new Size(63, 15);
+        pipeNameLabel.Size = new Size(67, 15);
         pipeNameLabel.TabIndex = 1;
         pipeNameLabel.Text = "Pipe name";
         // 
@@ -93,14 +94,26 @@ partial class PipeRunnerForm
         outputPanel.BackColor = SystemColors.ControlLightLight;
         outputPanel.Location = new Point(3, 4);
         outputPanel.Name = "outputPanel";
-        outputPanel.Size = new Size(495, 674);
+        outputPanel.Size = new Size(443, 674);
         outputPanel.TabIndex = 4;
+        // 
+        // cancelButton
+        // 
+        cancelButton.Enabled = false;
+        cancelButton.Location = new Point(788, 699);
+        cancelButton.Name = "cancelButton";
+        cancelButton.Size = new Size(80, 23);
+        cancelButton.TabIndex = 7;
+        cancelButton.Text = "Cancel";
+        cancelButton.UseVisualStyleBackColor = true;
+        cancelButton.Click += CancelButton_Click;
         // 
         // PipeRunnerForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(1016, 730);
+        Controls.Add(cancelButton);
         Controls.Add(runButton);
         Controls.Add(splitContainer);
         Name = "PipeRunnerForm";
@@ -119,4 +132,5 @@ partial class PipeRunnerForm
     private SplitContainer splitContainer;
     private Controls.AutoTopDownLayoutControl outputPanel;
     private Controls.AutoTopDownLayoutControl userInputPanel;
+    private Button cancelButton;
 }

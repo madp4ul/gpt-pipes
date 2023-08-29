@@ -16,13 +16,13 @@ public class ChatBotTaskRunner : IChatBotTaskRunner
         _chatBotProvider = chatBotProvider;
     }
 
-    public async Task<IChatBotResponse> RunTaskAsync(ChatBotTaskTemplate taskTemplate, TaskVariableValueMap inputs, ITaskTemplateFiller taskTemplateFiller)
+    public async Task<IChatBotResponse> RunTaskAsync(ChatBotTaskTemplate taskTemplate, TaskVariableValueMap inputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default)
     {
         var chatBot = _chatBotProvider.CreateChatBot(taskTemplate.ChatBotName);
 
         var task = taskTemplateFiller.FillInput(taskTemplate, inputs);
 
-        var response = await chatBot.RespondAsync(task);
+        var response = await chatBot.RespondAsync(task, cancellationToken);
 
         return response;
     }

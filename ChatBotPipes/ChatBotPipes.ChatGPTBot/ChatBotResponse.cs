@@ -33,6 +33,11 @@ internal class ChatBotResponse : IChatBotResponse
         _eventThreadContext.Post(_ => DataReceived?.Invoke(data), null);
     }
 
+    public void MarkAsCancelled()
+    {
+        _tcs.SetCanceled();
+    }
+
     public void MarkAsComplete()
     {
         _tcs.SetResult(GetCurrentResponse());

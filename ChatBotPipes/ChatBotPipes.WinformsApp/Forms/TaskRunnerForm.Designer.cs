@@ -34,6 +34,7 @@ partial class TaskRunnerForm
         chatPreviewPanel = new FlowLayoutPanel();
         label1 = new Label();
         splitContainer1 = new SplitContainer();
+        cancelButton = new Button();
         userInputPanel = new Controls.AutoTopDownLayoutControl();
         chatPreviewPanel.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -47,7 +48,7 @@ partial class TaskRunnerForm
         nameLabel.AutoSize = true;
         nameLabel.Location = new Point(3, 0);
         nameLabel.Name = "nameLabel";
-        nameLabel.Size = new Size(62, 15);
+        nameLabel.Size = new Size(68, 15);
         nameLabel.TabIndex = 0;
         nameLabel.Text = "Task name";
         // 
@@ -68,7 +69,7 @@ partial class TaskRunnerForm
         outputTextBox.Location = new Point(6, 436);
         outputTextBox.Name = "outputTextBox";
         outputTextBox.OutputText = "";
-        outputTextBox.Size = new Size(483, 238);
+        outputTextBox.Size = new Size(405, 238);
         outputTextBox.TabIndex = 7;
         // 
         // chatPreviewPanel
@@ -77,7 +78,7 @@ partial class TaskRunnerForm
         chatPreviewPanel.Controls.Add(label1);
         chatPreviewPanel.Location = new Point(3, 3);
         chatPreviewPanel.Name = "chatPreviewPanel";
-        chatPreviewPanel.Size = new Size(486, 427);
+        chatPreviewPanel.Size = new Size(408, 427);
         chatPreviewPanel.TabIndex = 8;
         // 
         // label1
@@ -85,7 +86,7 @@ partial class TaskRunnerForm
         label1.AutoSize = true;
         label1.Location = new Point(3, 0);
         label1.Name = "label1";
-        label1.Size = new Size(128, 15);
+        label1.Size = new Size(130, 15);
         label1.TabIndex = 0;
         label1.Text = "todo chat preview here";
         // 
@@ -98,6 +99,7 @@ partial class TaskRunnerForm
         // splitContainer1.Panel1
         // 
         splitContainer1.Panel1.BackColor = SystemColors.ControlLightLight;
+        splitContainer1.Panel1.Controls.Add(cancelButton);
         splitContainer1.Panel1.Controls.Add(userInputPanel);
         splitContainer1.Panel1.Controls.Add(runButton);
         splitContainer1.Panel1.Controls.Add(nameLabel);
@@ -111,6 +113,17 @@ partial class TaskRunnerForm
         splitContainer1.SplitterDistance = 459;
         splitContainer1.SplitterWidth = 30;
         splitContainer1.TabIndex = 10;
+        // 
+        // cancelButton
+        // 
+        cancelButton.Enabled = false;
+        cancelButton.Location = new Point(300, 651);
+        cancelButton.Name = "cancelButton";
+        cancelButton.Size = new Size(75, 23);
+        cancelButton.TabIndex = 10;
+        cancelButton.Text = "Cancel";
+        cancelButton.UseVisualStyleBackColor = true;
+        cancelButton.Click += ButtonCancel_Click;
         // 
         // userInputPanel
         // 
@@ -147,4 +160,5 @@ partial class TaskRunnerForm
     private Label label1;
     private SplitContainer splitContainer1;
     private Controls.AutoTopDownLayoutControl userInputPanel;
+    private Button cancelButton;
 }

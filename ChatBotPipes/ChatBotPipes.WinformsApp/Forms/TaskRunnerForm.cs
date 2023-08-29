@@ -18,6 +18,8 @@ public partial class TaskRunnerForm : Form
     private readonly IChatBotTaskRunner _taskRunner = null!;
     private readonly ITaskTemplateFiller _taskTemplateFiller = null!;
 
+    private CancellationTokenSource? _cancellationTokenSource;
+
     public ChatBotTaskTemplate? TaskTemplate { get; private set; }
 
     private TaskVariableValueMap? _taskVariableValueMap;
@@ -79,26 +81,42 @@ public partial class TaskRunnerForm : Form
 
     private async void RunButton_Click(object sender, EventArgs e)
     {
+        SetAreControlsEnabled(false);
+
+        _cancellationTokenSource = new CancellationTokenSource();
+
+        try
+        {
+            await RunTaskAsync(_cancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        { }
+        finally
+        {
+            SetAreControlsEnabled(true);
+        }
+    }
+
+    private async Task RunTaskAsync(CancellationToken cancellationToken)
+    {
         ArgumentNullException.ThrowIfNull(TaskTemplate);
         ArgumentNullException.ThrowIfNull(_taskVariableValueMap);
 
-        SetAreControlsEnabled(false);
         outputTextBox.OutputText = "";
 
-        var response = await _taskRunner.RunTaskAsync(TaskTemplate, _taskVariableValueMap, _taskTemplateFiller);
+        var response = await _taskRunner.RunTaskAsync(TaskTemplate, _taskVariableValueMap, _taskTemplateFiller, cancellationToken);
 
         response.DataReceived += Response_DataReceived;
 
         await response.AwaitCompletionAsync();
 
         response.DataReceived -= Response_DataReceived;
-
-        SetAreControlsEnabled(true);
     }
 
     private void SetAreControlsEnabled(bool enabled)
     {
         runButton.Enabled = enabled;
+        cancelButton.Enabled = !enabled;
 
         foreach (var control in userInputPanel.Rows.OfType<UserTaskInputControl>())
         {
@@ -109,5 +127,10 @@ public partial class TaskRunnerForm : Form
     private void Response_DataReceived(string additionalText)
     {
         outputTextBox.OutputText += additionalText;
+    }
+
+    private void ButtonCancel_Click(object sender, EventArgs e)
+    {
+        _cancellationTokenSource?.Cancel();
     }
 }

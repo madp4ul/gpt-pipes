@@ -18,6 +18,7 @@ public partial class PipeRunnerForm : Form
 {
     private readonly IChatBotPipeRunner _pipeRunner = null!;
     private readonly ITaskTemplateFiller _taskTemplateFiller = null!;
+    private CancellationTokenSource? _cancellationTokenSource;
 
     public ChatBotPipe? Pipe { get; private set; }
 
@@ -92,10 +93,33 @@ public partial class PipeRunnerForm : Form
 
     private async void RunButton_Click(object sender, EventArgs e)
     {
+        SetAreControlsEnabled(false);
+
+        foreach (var control in _pipeRunnerTaskControls.Values)
+        {
+            control.Clear();
+        }
+
+        _cancellationTokenSource = new CancellationTokenSource();
+
+        try
+        {
+            await RunPipeAsync(_cancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        { }
+        finally
+        {
+            SetAreControlsEnabled(true);
+        }
+    }
+
+    private async Task RunPipeAsync(CancellationToken cancellationToken)
+    {
         ArgumentNullException.ThrowIfNull(Pipe);
         ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
 
-        var responseEnumerable = _pipeRunner.RunPipeAsync(Pipe, _pipeVariableValueMap, _taskTemplateFiller);
+        var responseEnumerable = _pipeRunner.RunPipeAsync(Pipe, _pipeVariableValueMap, _taskTemplateFiller, cancellationToken);
 
         int index = 0;
         await foreach (var pipeResponse in responseEnumerable)
@@ -106,5 +130,21 @@ public partial class PipeRunnerForm : Form
 
             index++;
         }
+    }
+
+    private void SetAreControlsEnabled(bool enabled)
+    {
+        runButton.Enabled = enabled;
+        cancelButton.Enabled = !enabled;
+
+        foreach (var control in userInputPanel.Rows.OfType<UserPipeInputControl>())
+        {
+            control.Enabled = enabled;
+        }
+    }
+
+    private void CancelButton_Click(object sender, EventArgs e)
+    {
+        _cancellationTokenSource?.Cancel();
     }
 }

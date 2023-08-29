@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 public interface IChatBot
 {
-    Task<IChatBotResponse> RespondAsync(ChatBotTask task);
+    Task<IChatBotResponse> RespondAsync(ChatBotTask task, CancellationToken cancellationToken = default);
 }

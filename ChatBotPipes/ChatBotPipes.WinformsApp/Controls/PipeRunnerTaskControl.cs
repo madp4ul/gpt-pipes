@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ using System.Xml;
 
 public partial class PipeRunnerTaskControl : UserControl
 {
-    private StringBuilder _outputStringBuilder = new StringBuilder();
+    private StringBuilder _outputStringBuilder = new();
 
     public ChatBotTaskTemplate? TaskTemplate { get; private set; }
 
@@ -35,17 +36,30 @@ public partial class PipeRunnerTaskControl : UserControl
 
     public async Task UpdateFromChatbotResponseAsync(IChatBotResponse chatBotResponse)
     {
-        _outputStringBuilder.Clear();
+        Clear();
 
         outputTextBox.OutputText = chatBotResponse.GetCurrentResponse();
 
         chatBotResponse.DataReceived += ChatBotResponse_DataReceived;
         updateOutputTimer.Start();
 
-        outputTextBox.OutputText = await chatBotResponse.AwaitCompletionAsync();
+        try
+        {
+            outputTextBox.OutputText = await chatBotResponse.AwaitCompletionAsync();
+        }
+        catch (OperationCanceledException)
+        { }
+        finally
+        {
+            updateOutputTimer.Stop();
+            chatBotResponse.DataReceived -= ChatBotResponse_DataReceived;
+        }
+    }
 
-        updateOutputTimer.Stop();
-        chatBotResponse.DataReceived -= ChatBotResponse_DataReceived;
+    public void Clear()
+    {
+        _outputStringBuilder.Clear();
+        outputTextBox.OutputText = "";
     }
 
     private void ChatBotResponse_DataReceived(string additonalText)
