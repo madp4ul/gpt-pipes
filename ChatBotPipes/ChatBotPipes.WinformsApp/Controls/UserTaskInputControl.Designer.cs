@@ -37,7 +37,7 @@ partial class UserTaskInputControl
         inputNameLabel.AutoSize = true;
         inputNameLabel.Location = new Point(3, 6);
         inputNameLabel.Name = "inputNameLabel";
-        inputNameLabel.Size = new Size(68, 15);
+        inputNameLabel.Size = new Size(69, 15);
         inputNameLabel.TabIndex = 0;
         inputNameLabel.Text = "Input name";
         inputNameLabel.TextAlign = ContentAlignment.TopRight;
@@ -49,7 +49,7 @@ partial class UserTaskInputControl
         userInputTextBox.Multiline = true;
         userInputTextBox.Name = "userInputTextBox";
         userInputTextBox.ScrollBars = ScrollBars.Vertical;
-        userInputTextBox.Size = new Size(502, 243);
+        userInputTextBox.Size = new Size(517, 327);
         userInputTextBox.TabIndex = 1;
         userInputTextBox.TextChanged += TextBox1_TextChanged;
         // 
@@ -60,7 +60,7 @@ partial class UserTaskInputControl
         Controls.Add(userInputTextBox);
         Controls.Add(inputNameLabel);
         Name = "UserTaskInputControl";
-        Size = new Size(508, 270);
+        Size = new Size(523, 354);
         ResumeLayout(false);
         PerformLayout();
     }

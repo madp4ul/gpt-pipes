@@ -55,7 +55,7 @@ partial class TaskRunnerForm
         // runButton
         // 
         runButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        runButton.Location = new Point(381, 651);
+        runButton.Location = new Point(464, 820);
         runButton.Name = "runButton";
         runButton.Size = new Size(75, 23);
         runButton.TabIndex = 4;
@@ -66,10 +66,10 @@ partial class TaskRunnerForm
         // outputTextBox
         // 
         outputTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        outputTextBox.Location = new Point(6, 436);
+        outputTextBox.Location = new Point(6, 354);
         outputTextBox.Name = "outputTextBox";
         outputTextBox.OutputText = "";
-        outputTextBox.Size = new Size(405, 238);
+        outputTextBox.Size = new Size(553, 489);
         outputTextBox.TabIndex = 7;
         // 
         // chatPreviewPanel
@@ -78,7 +78,7 @@ partial class TaskRunnerForm
         chatPreviewPanel.Controls.Add(label1);
         chatPreviewPanel.Location = new Point(3, 3);
         chatPreviewPanel.Name = "chatPreviewPanel";
-        chatPreviewPanel.Size = new Size(408, 427);
+        chatPreviewPanel.Size = new Size(556, 345);
         chatPreviewPanel.TabIndex = 8;
         // 
         // label1
@@ -109,15 +109,16 @@ partial class TaskRunnerForm
         splitContainer1.Panel2.BackColor = SystemColors.ControlLightLight;
         splitContainer1.Panel2.Controls.Add(outputTextBox);
         splitContainer1.Panel2.Controls.Add(chatPreviewPanel);
-        splitContainer1.Size = new Size(981, 677);
-        splitContainer1.SplitterDistance = 459;
+        splitContainer1.Size = new Size(1160, 846);
+        splitContainer1.SplitterDistance = 542;
         splitContainer1.SplitterWidth = 30;
         splitContainer1.TabIndex = 10;
         // 
         // cancelButton
         // 
+        cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
         cancelButton.Enabled = false;
-        cancelButton.Location = new Point(300, 651);
+        cancelButton.Location = new Point(383, 820);
         cancelButton.Name = "cancelButton";
         cancelButton.Size = new Size(75, 23);
         cancelButton.TabIndex = 10;
@@ -130,14 +131,14 @@ partial class TaskRunnerForm
         userInputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         userInputPanel.Location = new Point(3, 18);
         userInputPanel.Name = "userInputPanel";
-        userInputPanel.Size = new Size(453, 627);
+        userInputPanel.Size = new Size(536, 796);
         userInputPanel.TabIndex = 9;
         // 
         // TaskRunnerForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(1005, 701);
+        ClientSize = new Size(1184, 870);
         Controls.Add(splitContainer1);
         Name = "TaskRunnerForm";
         Text = "TaskRunnerForm";

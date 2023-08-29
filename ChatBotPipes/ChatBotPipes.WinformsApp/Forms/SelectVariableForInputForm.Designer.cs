@@ -38,7 +38,7 @@ partial class SelectVariableForInputForm
         variablesListView.Location = new Point(12, 12);
         variablesListView.MultiSelect = false;
         variablesListView.Name = "variablesListView";
-        variablesListView.Size = new Size(355, 230);
+        variablesListView.Size = new Size(355, 274);
         variablesListView.TabIndex = 2;
         variablesListView.UseCompatibleStateImageBehavior = false;
         variablesListView.SelectedIndexChanged += VariablesListView_SelectedIndexChanged;
@@ -47,7 +47,7 @@ partial class SelectVariableForInputForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(379, 254);
+        ClientSize = new Size(379, 298);
         Controls.Add(variablesListView);
         Name = "SelectVariableForInputForm";
         Text = "SelectVariableForInputForm";

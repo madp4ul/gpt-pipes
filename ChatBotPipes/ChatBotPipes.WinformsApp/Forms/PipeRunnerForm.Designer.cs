@@ -52,7 +52,7 @@ partial class PipeRunnerForm
         // runButton
         // 
         runButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        runButton.Location = new Point(874, 699);
+        runButton.Location = new Point(1118, 845);
         runButton.Name = "runButton";
         runButton.Size = new Size(101, 23);
         runButton.TabIndex = 0;
@@ -75,8 +75,8 @@ partial class PipeRunnerForm
         // splitContainer.Panel2
         // 
         splitContainer.Panel2.Controls.Add(outputPanel);
-        splitContainer.Size = new Size(992, 681);
-        splitContainer.SplitterDistance = 461;
+        splitContainer.Size = new Size(1236, 827);
+        splitContainer.SplitterDistance = 574;
         splitContainer.SplitterWidth = 30;
         splitContainer.TabIndex = 6;
         // 
@@ -85,7 +85,7 @@ partial class PipeRunnerForm
         userInputPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         userInputPanel.Location = new Point(3, 18);
         userInputPanel.Name = "userInputPanel";
-        userInputPanel.Size = new Size(455, 660);
+        userInputPanel.Size = new Size(568, 806);
         userInputPanel.TabIndex = 6;
         // 
         // outputPanel
@@ -94,13 +94,14 @@ partial class PipeRunnerForm
         outputPanel.BackColor = SystemColors.ControlLightLight;
         outputPanel.Location = new Point(3, 4);
         outputPanel.Name = "outputPanel";
-        outputPanel.Size = new Size(443, 674);
+        outputPanel.Size = new Size(600, 820);
         outputPanel.TabIndex = 4;
         // 
         // cancelButton
         // 
+        cancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
         cancelButton.Enabled = false;
-        cancelButton.Location = new Point(788, 699);
+        cancelButton.Location = new Point(1032, 845);
         cancelButton.Name = "cancelButton";
         cancelButton.Size = new Size(80, 23);
         cancelButton.TabIndex = 7;
@@ -112,7 +113,7 @@ partial class PipeRunnerForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(1016, 730);
+        ClientSize = new Size(1260, 876);
         Controls.Add(cancelButton);
         Controls.Add(runButton);
         Controls.Add(splitContainer);

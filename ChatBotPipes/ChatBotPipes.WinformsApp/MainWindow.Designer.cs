@@ -50,7 +50,7 @@ partial class MainWindow
         tabControl1.Location = new Point(12, 12);
         tabControl1.Name = "tabControl1";
         tabControl1.SelectedIndex = 0;
-        tabControl1.Size = new Size(892, 606);
+        tabControl1.Size = new Size(1041, 761);
         tabControl1.TabIndex = 0;
         // 
         // pipePage
@@ -59,7 +59,7 @@ partial class MainWindow
         pipePage.Location = new Point(4, 24);
         pipePage.Name = "pipePage";
         pipePage.Padding = new Padding(3);
-        pipePage.Size = new Size(884, 578);
+        pipePage.Size = new Size(1033, 733);
         pipePage.TabIndex = 1;
         pipePage.Text = "Pipes";
         pipePage.UseVisualStyleBackColor = true;
@@ -69,7 +69,7 @@ partial class MainWindow
         pipeManagementPage1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         pipeManagementPage1.Location = new Point(6, 6);
         pipeManagementPage1.Name = "pipeManagementPage1";
-        pipeManagementPage1.Size = new Size(872, 566);
+        pipeManagementPage1.Size = new Size(1021, 721);
         pipeManagementPage1.TabIndex = 0;
         // 
         // taskTemplatePage
@@ -113,7 +113,7 @@ partial class MainWindow
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(916, 630);
+        ClientSize = new Size(1065, 785);
         Controls.Add(tabControl1);
         Name = "MainWindow";
         Text = "ChatGPT Pipes";

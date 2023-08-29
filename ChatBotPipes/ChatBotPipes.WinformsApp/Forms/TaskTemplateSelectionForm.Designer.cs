@@ -38,7 +38,7 @@ partial class TaskTemplateSelectionForm
         taskManagementPage.CanEdit = false;
         taskManagementPage.Location = new Point(12, 12);
         taskManagementPage.Name = "taskManagementPage";
-        taskManagementPage.Size = new Size(776, 388);
+        taskManagementPage.Size = new Size(812, 441);
         taskManagementPage.TabIndex = 0;
         taskManagementPage.SelectedTaskTemplateChanged += TaskManagementPage_SelectedTaskTemplateChanged;
         // 
@@ -46,9 +46,9 @@ partial class TaskTemplateSelectionForm
         // 
         takeSelectedTaskTemplateButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         takeSelectedTaskTemplateButton.Enabled = false;
-        takeSelectedTaskTemplateButton.Location = new Point(12, 415);
+        takeSelectedTaskTemplateButton.Location = new Point(12, 468);
         takeSelectedTaskTemplateButton.Name = "takeSelectedTaskTemplateButton";
-        takeSelectedTaskTemplateButton.Size = new Size(776, 23);
+        takeSelectedTaskTemplateButton.Size = new Size(812, 23);
         takeSelectedTaskTemplateButton.TabIndex = 1;
         takeSelectedTaskTemplateButton.Text = "Take selected Task";
         takeSelectedTaskTemplateButton.UseVisualStyleBackColor = true;
@@ -58,7 +58,7 @@ partial class TaskTemplateSelectionForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(800, 450);
+        ClientSize = new Size(836, 503);
         Controls.Add(takeSelectedTaskTemplateButton);
         Controls.Add(taskManagementPage);
         Name = "TaskTemplateSelectionForm";

@@ -36,7 +36,7 @@ partial class UserPipeInputControl
         userTaskInputControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         userTaskInputControl.Location = new Point(3, 3);
         userTaskInputControl.Name = "userTaskInputControl";
-        userTaskInputControl.Size = new Size(438, 229);
+        userTaskInputControl.Size = new Size(491, 347);
         userTaskInputControl.TabIndex = 0;
         userTaskInputControl.UserInputChanged += UserTaskInputControl_UserInputChanged;
         // 
@@ -46,7 +46,7 @@ partial class UserPipeInputControl
         AutoScaleMode = AutoScaleMode.Font;
         Controls.Add(userTaskInputControl);
         Name = "UserPipeInputControl";
-        Size = new Size(444, 235);
+        Size = new Size(497, 353);
         ResumeLayout(false);
     }
 

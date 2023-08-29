@@ -47,7 +47,7 @@ partial class PipeRunnerTaskControl
         // runButton
         // 
         runButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        runButton.Location = new Point(289, 34);
+        runButton.Location = new Point(513, 34);
         runButton.Name = "runButton";
         runButton.Size = new Size(75, 40);
         runButton.TabIndex = 2;
@@ -61,7 +61,7 @@ partial class PipeRunnerTaskControl
         outputTextBox.Location = new Point(3, 34);
         outputTextBox.Name = "outputTextBox";
         outputTextBox.OutputText = "";
-        outputTextBox.Size = new Size(280, 162);
+        outputTextBox.Size = new Size(504, 330);
         outputTextBox.TabIndex = 3;
         // 
         // updateOutputTimer
@@ -77,7 +77,7 @@ partial class PipeRunnerTaskControl
         Controls.Add(runButton);
         Controls.Add(taskTemplateNameLabel);
         Name = "PipeRunnerTaskControl";
-        Size = new Size(369, 199);
+        Size = new Size(593, 367);
         ResumeLayout(false);
         PerformLayout();
     }

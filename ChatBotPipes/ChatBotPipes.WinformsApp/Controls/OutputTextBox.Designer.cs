@@ -40,7 +40,7 @@ partial class OutputTextBox
         textBox.Name = "textBox";
         textBox.ReadOnly = true;
         textBox.ScrollBars = ScrollBars.Vertical;
-        textBox.Size = new Size(224, 157);
+        textBox.Size = new Size(393, 363);
         textBox.TabIndex = 0;
         // 
         // label1
@@ -48,7 +48,7 @@ partial class OutputTextBox
         label1.AutoSize = true;
         label1.Location = new Point(0, 3);
         label1.Name = "label1";
-        label1.Size = new Size(45, 15);
+        label1.Size = new Size(43, 15);
         label1.TabIndex = 1;
         label1.Text = "Output";
         // 
@@ -59,7 +59,7 @@ partial class OutputTextBox
         Controls.Add(label1);
         Controls.Add(textBox);
         Name = "OutputTextBox";
-        Size = new Size(275, 157);
+        Size = new Size(444, 363);
         ResumeLayout(false);
         PerformLayout();
     }
