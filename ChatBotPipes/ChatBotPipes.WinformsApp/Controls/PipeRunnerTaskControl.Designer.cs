@@ -28,9 +28,11 @@ partial class PipeRunnerTaskControl
     /// </summary>
     private void InitializeComponent()
     {
+        components = new System.ComponentModel.Container();
         taskTemplateNameLabel = new Label();
         runButton = new Button();
         outputTextBox = new OutputTextBox();
+        updateOutputTimer = new System.Windows.Forms.Timer(components);
         SuspendLayout();
         // 
         // taskTemplateNameLabel
@@ -38,7 +40,7 @@ partial class PipeRunnerTaskControl
         taskTemplateNameLabel.AutoSize = true;
         taskTemplateNameLabel.Location = new Point(3, 10);
         taskTemplateNameLabel.Name = "taskTemplateNameLabel";
-        taskTemplateNameLabel.Size = new Size(112, 15);
+        taskTemplateNameLabel.Size = new Size(119, 15);
         taskTemplateNameLabel.TabIndex = 0;
         taskTemplateNameLabel.Text = "Task template name";
         // 
@@ -58,8 +60,14 @@ partial class PipeRunnerTaskControl
         outputTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         outputTextBox.Location = new Point(3, 34);
         outputTextBox.Name = "outputTextBox";
+        outputTextBox.OutputText = "";
         outputTextBox.Size = new Size(280, 162);
         outputTextBox.TabIndex = 3;
+        // 
+        // updateOutputTimer
+        // 
+        updateOutputTimer.Interval = 16;
+        updateOutputTimer.Tick += UpdateOutputTimer_Tick;
         // 
         // PipeRunnerTaskControl
         // 
@@ -79,4 +87,5 @@ partial class PipeRunnerTaskControl
     private Label taskTemplateNameLabel;
     private Button runButton;
     private OutputTextBox outputTextBox;
+    private System.Windows.Forms.Timer updateOutputTimer;
 }

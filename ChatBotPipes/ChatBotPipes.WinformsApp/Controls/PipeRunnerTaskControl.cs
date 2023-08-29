@@ -17,6 +17,8 @@ using System.Xml;
 
 public partial class PipeRunnerTaskControl : UserControl
 {
+    private StringBuilder _outputStringBuilder = new StringBuilder();
+
     public ChatBotTaskTemplate? TaskTemplate { get; private set; }
 
     public PipeRunnerTaskControl()
@@ -33,18 +35,22 @@ public partial class PipeRunnerTaskControl : UserControl
 
     public async Task UpdateFromChatbotResponseAsync(IChatBotResponse chatBotResponse)
     {
+        _outputStringBuilder.Clear();
+
         outputTextBox.OutputText = chatBotResponse.GetCurrentResponse();
 
         chatBotResponse.DataReceived += ChatBotResponse_DataReceived;
+        updateOutputTimer.Start();
 
         outputTextBox.OutputText = await chatBotResponse.AwaitCompletionAsync();
 
+        updateOutputTimer.Stop();
         chatBotResponse.DataReceived -= ChatBotResponse_DataReceived;
     }
 
     private void ChatBotResponse_DataReceived(string additonalText)
     {
-        outputTextBox.OutputText += additonalText;
+        _outputStringBuilder.Append(additonalText);
     }
 
     private void RunButton_Click(object sender, EventArgs e)
@@ -60,4 +66,9 @@ public partial class PipeRunnerTaskControl : UserControl
 
     [GeneratedRegex("\n")]
     private static partial Regex NewLineRegex();
+
+    private void UpdateOutputTimer_Tick(object sender, EventArgs e)
+    {
+        outputTextBox.OutputText = _outputStringBuilder.ToString();
+    }
 }
