@@ -42,7 +42,7 @@ public partial class PipeTaskTemplateControl : UserControl
         TaskTemplateMapping = taskTemplateMapping;
         SourcePipe = sourcePipe;
 
-        nameLabel.Text = taskTemplateMapping.TaskTemplate.Name;
+        nameLabel.Text = sourcePipe.GetTaskNameInContext(taskTemplateMapping);
         chatBotNameLabel.Text = !string.IsNullOrEmpty(taskTemplateMapping.TaskTemplate.ChatBotName)
             ? taskTemplateMapping.TaskTemplate.ChatBotName
             : $"{_chatBotProvider.GetDefaultBotName()} (default)";

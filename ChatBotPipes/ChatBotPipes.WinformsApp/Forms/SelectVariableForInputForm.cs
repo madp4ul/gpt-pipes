@@ -13,9 +13,9 @@ using System.Windows.Forms;
 
 public partial class SelectVariableForInputForm : Form
 {
-    private readonly Dictionary<ListViewGroup, ChatBotTaskTemplate?> _groupMap = new();
+    private readonly Dictionary<ListViewGroup, MappedChatBotTaskTemplate?> _groupMap = new();
 
-    public Dictionary<ChatBotTaskTemplate, List<string>>? Variables { get; private set; }
+    public Dictionary<MappedChatBotTaskTemplate, List<string>>? Variables { get; private set; }
 
     public TaskTemplateVariableName? SelectedVariable { get; private set; }
 
@@ -24,7 +24,7 @@ public partial class SelectVariableForInputForm : Form
         InitializeComponent();
     }
 
-    public void SetValidVariables(Dictionary<ChatBotTaskTemplate, List<string>> variables)
+    public void SetValidVariables(ChatBotPipe pipe, Dictionary<MappedChatBotTaskTemplate, List<string>> variables)
     {
         Variables = variables;
 
@@ -35,7 +35,7 @@ public partial class SelectVariableForInputForm : Form
 
         foreach (var (taskTemplate, variableList) in variables)
         {
-            var group = new ListViewGroup(taskTemplate.Name);
+            var group = new ListViewGroup(pipe.GetTaskNameInContext(taskTemplate));
             _groupMap.Add(group, taskTemplate);
 
             variablesListView.Groups.Add(group);

@@ -62,25 +62,36 @@ public class FilebasedChatBotPipeStore : IChatBotPipeStore
 
     private ChatBotPipe FromStored(StoredPipe storedPipe, Dictionary<Guid, ChatBotTaskTemplate> allTaskTemplates)
     {
-        var tasks = storedPipe.Tasks
-            .Select(FromStored)
-            .OfType<MappedChatBotTaskTemplate>()
-            .ToList();
+        var tasks = new List<MappedChatBotTaskTemplate>();
+
+        foreach (var storedTask in storedPipe.Tasks)
+        {
+            if (!allTaskTemplates.TryGetValue(storedTask.TaskTemplate.Id, out ChatBotTaskTemplate? taskTemplate))
+            {
+                continue; // the referenced task does not exist anymore.
+            }
+
+            var inputMappings = storedTask.InputMapping
+                .Where(kv => allTaskTemplates.ContainsKey(kv.Value.TaskTemplate.Id))
+                .Select(kv => (kv.Key, Value: GetVariableReference(kv.Value)))
+                .Where(kv => kv.Value is not null)
+                .ToDictionary(kv => kv.Key, kv => kv.Value!);
+
+            tasks.Add(new MappedChatBotTaskTemplate(taskTemplate, inputMappings));
+        }
 
         return new ChatBotPipe(tasks, storedPipe.Name, storedPipe.Id);
 
-        MappedChatBotTaskTemplate? FromStored(StoredMappedChatBotTaskTemplate storedTaskTemplate)
+        TaskTemplateVariableName? GetVariableReference(StoredTaskTemplateVariableName storedVariableReference)
         {
-            if (!allTaskTemplates.TryGetValue(storedTaskTemplate.TaskTemplate.Id, out ChatBotTaskTemplate? taskTemplate))
+            var mappedTaskTemplate = tasks[storedVariableReference.TaskTemplate.PipeIndex];
+
+            if (mappedTaskTemplate.TaskTemplate.Id != storedVariableReference.TaskTemplate.Id)
             {
-                return null;
+                return null; // At saved index we found a different task template than expected. Ignore this reference
             }
 
-            var inputMappings = storedTaskTemplate.InputMapping
-                .Where(kv => allTaskTemplates.ContainsKey(kv.Value.TaskTemplate.Id))
-                .ToDictionary(kv => kv.Key, kv => new TaskTemplateVariableName(allTaskTemplates[kv.Value.TaskTemplate.Id], kv.Value.InputName));
-
-            return new MappedChatBotTaskTemplate(taskTemplate, inputMappings);
+            return new TaskTemplateVariableName(mappedTaskTemplate, storedVariableReference.InputName);
         }
     }
 
@@ -106,27 +117,28 @@ public class FilebasedChatBotPipeStore : IChatBotPipeStore
 
         var path = GetFilePath(pipe);
 
-        var storedMappedTaskTemplateReferences = pipe.Tasks
-            .Select(ToStoredTask)
-            .ToList();
+        var storedMappedTaskTemplateReferences = new List<StoredMappedChatBotTaskTemplate>();
+
+        foreach (var task in pipe.Tasks)
+        {
+            var reference = new TaskTemplateReference(task.TaskTemplate.Id);
+            var inputMapping = task.InputMapping
+                .ToDictionary(kv => kv.Key, kv => ToStoredTaskTemplateVariableName(kv.Value));
+
+            storedMappedTaskTemplateReferences.Add(new StoredMappedChatBotTaskTemplate(reference, inputMapping));
+
+            StoredTaskTemplateVariableName ToStoredTaskTemplateVariableName(TaskTemplateVariableName variableName)
+            {
+                int index = pipe.Tasks.IndexOf(variableName.TaskTemplate);
+                return new StoredTaskTemplateVariableName(new MappedTaskTemplateReference(variableName.TaskTemplate.TaskTemplate.Id, index), variableName.InputName);
+            }
+        }
 
         var storedPipe = new StoredPipe(pipe.Id, pipe.Name, storedMappedTaskTemplateReferences);
 
         var fileContent = JsonSerializer.Serialize(storedPipe);
 
         await _userDataFileService.WriteFileAsync(path, fileContent);
-
-        static StoredMappedChatBotTaskTemplate ToStoredTask(MappedChatBotTaskTemplate mappedTaskTemplate)
-        {
-            var reference = new TaskTemplateReference(mappedTaskTemplate.TaskTemplate.Id);
-            var inputMapping = mappedTaskTemplate.InputMapping
-                .ToDictionary(kv => kv.Key, kv => ToStoredTaskTemplateVariableName(kv.Value));
-
-            return new StoredMappedChatBotTaskTemplate(reference, inputMapping);
-
-            static StoredTaskTemplateVariableName ToStoredTaskTemplateVariableName(TaskTemplateVariableName variableName)
-                => new(new TaskTemplateReference(variableName.TaskTemplate.Id), variableName.InputName);
-        }
     }
 
     private async Task ThrowIfNotCurrentUserAsync(User user)
@@ -149,7 +161,8 @@ public class FilebasedChatBotPipeStore : IChatBotPipeStore
 
     private record StoredMappedChatBotTaskTemplate(TaskTemplateReference TaskTemplate, Dictionary<string, StoredTaskTemplateVariableName> InputMapping);
 
-    private record StoredTaskTemplateVariableName(TaskTemplateReference TaskTemplate, string InputName);
+    private record StoredTaskTemplateVariableName(MappedTaskTemplateReference TaskTemplate, string InputName);
 
+    private record MappedTaskTemplateReference(Guid Id, int PipeIndex);
     private record TaskTemplateReference(Guid Id);
 }

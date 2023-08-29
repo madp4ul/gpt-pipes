@@ -36,18 +36,19 @@ public partial class PipeInputMappingControl : UserControl
         Data = data;
 
         inputNameLabel.Text = data.InputName + ":";
-        variableReferenceLabel.Text = GetVariableReferenceDescription(data.VariableReference);
-
+        variableReferenceLabel.Text = GetVariableReferenceDescription(data);
     }
 
-    private static string GetVariableReferenceDescription(TaskTemplateVariableName? variableReference)
+    private static string GetVariableReferenceDescription(PipeInputMappingControlData data)
     {
-        if (variableReference is null)
+        if (data.VariableReference is null)
         {
             return "user input";
         }
 
-        return $"{variableReference.InputName} from '{variableReference.TaskTemplate.Name}'";
+        string taskName = data.SourcePipe.GetTaskNameInContext(data.VariableReference.TaskTemplate);
+
+        return $"{data.VariableReference.InputName} from '{taskName}'";
     }
 
     private void UpdateVariableReferenceButton_Click(object sender, EventArgs e)
@@ -55,16 +56,15 @@ public partial class PipeInputMappingControl : UserControl
         ArgumentNullException.ThrowIfNull(Data);
 
         var referencibleTaskTemplates = Data.SourcePipe.Tasks
-            .TakeWhile(tt => tt.TaskTemplate != Data.SourceTaskTemplate.TaskTemplate)
-            .Select(tt => tt.TaskTemplate)
+            .TakeWhile(tt => tt != Data.SourceTaskTemplate)
             .ToList();
 
         var referencibleVariables = referencibleTaskTemplates
-            .ToDictionary(tt => tt, tt => tt.GetReferencibleVariableNames(_templateFiller).ToList());
+            .ToDictionary(tt => tt, tt => tt.TaskTemplate.GetReferencibleVariableNames(_templateFiller).ToList());
 
         var selectVariableReferenceForm = new SelectVariableForInputForm();
 
-        selectVariableReferenceForm.SetValidVariables(referencibleVariables);
+        selectVariableReferenceForm.SetValidVariables(Data.SourcePipe, referencibleVariables);
 
         if (selectVariableReferenceForm.ShowDialog() == DialogResult.OK)
         {

@@ -38,7 +38,7 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
     {
         // take user inputs and add values from referenced variables in the pipe to them.
 
-        TaskVariableValueMap taskValueMap = variableValues.Get(task.TaskTemplate);
+        TaskVariableValueMap taskValueMap = variableValues.Get(task);
 
         foreach (var (inputName, VariableReference) in task.InputMapping)
         {

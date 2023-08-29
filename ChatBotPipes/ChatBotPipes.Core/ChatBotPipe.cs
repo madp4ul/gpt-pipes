@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public record ChatBotPipe
 {
@@ -20,6 +21,13 @@ public record ChatBotPipe
         Tasks = tasks;
     }
 
+    public string GetTaskNameInContext(MappedChatBotTaskTemplate taskTemplate)
+    {
+        int taskIndex = Tasks.IndexOf(taskTemplate);
+
+        return $"{taskTemplate.TaskTemplate.Name} (id {taskIndex})";
+    }
+
     public List<TaskTemplateVariableName> GetRequiredInputs(ITaskTemplateFiller templateFiller)
     {
         var result = new List<TaskTemplateVariableName>();
@@ -32,7 +40,7 @@ public record ChatBotPipe
             {
                 if (!HasValidInputMapping(mappedTaskTemplate, input, templateFiller))
                 {
-                    result.Add(new TaskTemplateVariableName(mappedTaskTemplate.TaskTemplate, input));
+                    result.Add(new TaskTemplateVariableName(mappedTaskTemplate, input));
                 }
             }
         }
@@ -56,10 +64,9 @@ public record ChatBotPipe
         {
             // There is an input mapping, but the references task template does not come before the current task in the pipe (anymore?).
             return false;
-
         }
 
-        var variablesOfReferencedTaskTemplate = referencedVariable.TaskTemplate.GetReferencibleVariableNames(templateFiller);
+        var variablesOfReferencedTaskTemplate = referencedVariable.TaskTemplate.TaskTemplate.GetReferencibleVariableNames(templateFiller);
         if (!variablesOfReferencedTaskTemplate.Contains(referencedVariable.InputName))
         {
             // The referenced variable does not exist (anymore?) in the referenced task template.
@@ -68,7 +75,7 @@ public record ChatBotPipe
 
         return true;
 
-        bool IsBeforeCurrentTaskTemplate(MappedChatBotTaskTemplate t) => t.TaskTemplate != currentTaskTemplate.TaskTemplate;
-        bool IsReferencedTaskTemplate(MappedChatBotTaskTemplate t) => t.TaskTemplate == referencedVariable?.TaskTemplate;
+        bool IsBeforeCurrentTaskTemplate(MappedChatBotTaskTemplate t) => t != currentTaskTemplate;
+        bool IsReferencedTaskTemplate(MappedChatBotTaskTemplate t) => t == referencedVariable?.TaskTemplate;
     }
 }

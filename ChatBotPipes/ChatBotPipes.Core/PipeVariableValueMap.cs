@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public class PipeVariableValueMap
 {
-    private readonly Dictionary<ChatBotTaskTemplate, TaskVariableValueMap> _mapping = new();
+    private readonly Dictionary<MappedChatBotTaskTemplate, TaskVariableValueMap> _mapping = new();
 
     public IEnumerable<TaskTemplateVariableName> MappedInputs => _mapping
         .SelectMany(kv => kv.Value.MappedInputs.Select(mi => new TaskTemplateVariableName(kv.Key, mi)))
@@ -20,19 +20,19 @@ public class PipeVariableValueMap
         taskValues.AddInputValue(templateVariable.InputName, value);
     }
 
-    public void AddOutputValue(ChatBotTaskTemplate taskTemplate, string value)
+    public void AddOutputValue(MappedChatBotTaskTemplate taskTemplate, string value)
     {
         var taskValues = GetTaskValues(taskTemplate);
 
         taskValues.AddOutputValue(value);
     }
 
-    public TaskVariableValueMap Get(ChatBotTaskTemplate taskTemplate)
+    public TaskVariableValueMap Get(MappedChatBotTaskTemplate taskTemplate)
     {
         return GetTaskValues(taskTemplate);
     }
 
-    private TaskVariableValueMap GetTaskValues(ChatBotTaskTemplate taskTemplate)
+    private TaskVariableValueMap GetTaskValues(MappedChatBotTaskTemplate taskTemplate)
     {
         if (!_mapping.ContainsKey(taskTemplate))
         {
