@@ -8,10 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-    <PackageReference Include="OpenAI" Version="1.7.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\OpenAI-API-dotnet-with-cancellation\OpenAI_API\OpenAI_API.csproj" />
     <ProjectReference Include="..\ChatBotPipes.Client\ChatBotPipes.Client.csproj" />
   </ItemGroup>
 

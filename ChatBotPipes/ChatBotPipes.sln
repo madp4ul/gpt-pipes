@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotPipes.LocalFileStore
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBotPipes.ChatGPTBot", "ChatBotPipes.ChatGPTBot\ChatBotPipes.ChatGPTBot.csproj", "{2AA081E3-594C-453B-9515-342EC7E05F45}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenAI_API", "..\OpenAI-API-dotnet-with-cancellation\OpenAI_API\OpenAI_API.csproj", "{AD044D76-7E86-4BC3-8DEF-27BF41D67626}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2AA081E3-594C-453B-9515-342EC7E05F45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AA081E3-594C-453B-9515-342EC7E05F45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AA081E3-594C-453B-9515-342EC7E05F45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD044D76-7E86-4BC3-8DEF-27BF41D67626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD044D76-7E86-4BC3-8DEF-27BF41D67626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD044D76-7E86-4BC3-8DEF-27BF41D67626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD044D76-7E86-4BC3-8DEF-27BF41D67626}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

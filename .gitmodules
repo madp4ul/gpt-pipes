@@ -1,0 +1,3 @@
+[submodule "OpenAI-API-dotnet-with-cancellation"]
+	path = OpenAI-API-dotnet-with-cancellation
+	url = https://github.com/madp4ul/OpenAI-API-dotnet-with-cancellation.git
