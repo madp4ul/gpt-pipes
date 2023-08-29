@@ -44,7 +44,7 @@ partial class TaskTemplateEditor
         label1.AutoSize = true;
         label1.Location = new Point(3, 11);
         label1.Name = "label1";
-        label1.Size = new Size(39, 15);
+        label1.Size = new Size(41, 15);
         label1.TabIndex = 0;
         label1.Text = "Name";
         // 
@@ -52,7 +52,7 @@ partial class TaskTemplateEditor
         // 
         taskTemplateNameTextBox.Location = new Point(48, 8);
         taskTemplateNameTextBox.Name = "taskTemplateNameTextBox";
-        taskTemplateNameTextBox.Size = new Size(193, 23);
+        taskTemplateNameTextBox.Size = new Size(193, 21);
         taskTemplateNameTextBox.TabIndex = 1;
         taskTemplateNameTextBox.Leave += TaskTemplateNameTextBox_Leave;
         // 
@@ -112,7 +112,7 @@ partial class TaskTemplateEditor
         inputListLabel.AutoSize = true;
         inputListLabel.Location = new Point(50, 35);
         inputListLabel.Name = "inputListLabel";
-        inputListLabel.Size = new Size(53, 15);
+        inputListLabel.Size = new Size(52, 15);
         inputListLabel.TabIndex = 12;
         inputListLabel.Text = "Input list";
         // 
@@ -139,6 +139,7 @@ partial class TaskTemplateEditor
         Controls.Add(label1);
         Name = "TaskTemplateEditor";
         Size = new Size(524, 361);
+        Load += TaskTemplateEditor_Load;
         ResumeLayout(false);
         PerformLayout();
     }

@@ -60,7 +60,7 @@ public class FilebasedChatBotPipeStore : IChatBotPipeStore
         return result;
     }
 
-    private ChatBotPipe FromStored(StoredPipe storedPipe, Dictionary<Guid, ChatBotTaskTemplate> allTaskTemplates)
+    private static ChatBotPipe FromStored(StoredPipe storedPipe, Dictionary<Guid, ChatBotTaskTemplate> allTaskTemplates)
     {
         var tasks = new List<MappedChatBotTaskTemplate>();
 

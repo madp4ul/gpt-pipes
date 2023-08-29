@@ -16,7 +16,7 @@ public partial class ChatMessageControl : UserControl
     public event EventHandler? MessageUpdated;
     public event EventHandler? MessageDeleted;
 
-    public ChatMessage ChatMessage { get; }
+    public ChatMessage? ChatMessage { get; private set; }
 
     private bool _canEdit = true;
     public bool CanEdit
@@ -29,10 +29,13 @@ public partial class ChatMessageControl : UserControl
         }
     }
 
-    public ChatMessageControl(ChatMessage chatMessage)
+    public ChatMessageControl()
     {
         InitializeComponent();
+    }
 
+    public void SetChatMessage(ChatMessage chatMessage)
+    {
         ChatMessage = chatMessage;
 
         authorComboBox.Items.AddRange(
@@ -56,6 +59,8 @@ public partial class ChatMessageControl : UserControl
 
     private void AuthorComboBox_SelectedIndexChanged(object sender, EventArgs e)
     {
+        ArgumentNullException.ThrowIfNull(ChatMessage);
+
         ChatMessage.Author = (ChatMessageAuthor)authorComboBox.SelectedIndex;
 
         MessageUpdated?.Invoke(this, EventArgs.Empty);
@@ -63,6 +68,8 @@ public partial class ChatMessageControl : UserControl
 
     private void MessageTextBox_Leave(object sender, EventArgs e)
     {
+        ArgumentNullException.ThrowIfNull(ChatMessage);
+
         ChatMessage.Text = messageTextBox.Text;
 
         MessageUpdated?.Invoke(this, EventArgs.Empty);

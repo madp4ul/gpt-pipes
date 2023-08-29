@@ -17,8 +17,8 @@ using System.Windows.Forms;
 
 public partial class TaskTemplateEditor : UserControl
 {
-    private readonly IChatBotProvider _chatBotProvider = null!;
-    private readonly ITaskTemplateFiller _taskTemplateFiller = null!;
+    private IChatBotProvider _chatBotProvider = null!;
+    private ITaskTemplateFiller _taskTemplateFiller = null!;
 
     public event EventHandler<ChatBotTaskTemplate>? TaskTemplateUpdated;
 
@@ -40,13 +40,16 @@ public partial class TaskTemplateEditor : UserControl
     public TaskTemplateEditor()
     {
         InitializeComponent();
+    }
 
-        SetControlsEditable();
-
+    private void TaskTemplateEditor_Load(object sender, EventArgs e)
+    {
         if (!DesignMode)
         {
             _chatBotProvider = Services.Get<IChatBotProvider>();
             _taskTemplateFiller = Services.Get<ITaskTemplateFiller>();
+
+            SetControlsEditable();
 
             chatBotSelectionComboBox.Items.Clear();
             chatBotSelectionComboBox.Items.AddRange(_chatBotProvider.GetBotNames().Prepend("").ToArray());
@@ -106,10 +109,12 @@ public partial class TaskTemplateEditor : UserControl
 
     private void AddChatMessage(ChatBotTaskTemplate taskTemplate, int chatMessageIndex)
     {
-        var chatMessageControl = new ChatMessageControl(taskTemplate.PredefinedInstructions[chatMessageIndex])
+        var chatMessageControl = new ChatMessageControl()
         {
             CanEdit = CanEdit
         };
+
+        chatMessageControl.SetChatMessage(taskTemplate.PredefinedInstructions[chatMessageIndex]);
 
         chatMessageControl.MessageUpdated += ChatMessageControl_MessageUpdated;
         chatMessageControl.MessageDeleted += ChatMessageControl_MessageDeleted;
@@ -138,7 +143,10 @@ public partial class TaskTemplateEditor : UserControl
 
         UpdateTaskTemplate(template =>
         {
-            template.PredefinedInstructions.Remove(chatMessageControl.ChatMessage);
+            var chatMessage = chatMessageControl.ChatMessage
+                ?? throw new ApplicationException("Found chat message control that did not have a chat message during removal");
+
+            template.PredefinedInstructions.Remove(chatMessage);
 
             chatMessagePanel.RemoveRow(chatMessageControl);
         });

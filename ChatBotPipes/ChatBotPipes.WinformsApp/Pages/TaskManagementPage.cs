@@ -42,11 +42,6 @@ public partial class TaskManagementPage : UserControl
         SetControlsEditable();
     }
 
-    private void InitializeServices()
-    {
-        _taskTemplateStore = Services.Get<IChatBotTaskTemplateStore>();
-    }
-
     private async void TaskManagement_Load(object sender, EventArgs e)
     {
         if (DesignMode)
@@ -54,7 +49,7 @@ public partial class TaskManagementPage : UserControl
             return;
         }
 
-        InitializeServices();
+        _taskTemplateStore = Services.Get<IChatBotTaskTemplateStore>();
 
         _taskTemplates = await _taskTemplateStore.GetTaskTemplatesAsync(AppUser.Default);
 
@@ -103,9 +98,9 @@ public partial class TaskManagementPage : UserControl
     {
         if (taskTemplateListBox.SelectedItem is ChatBotTaskTemplate selectedTemplate)
         {
-            taskTemplateEditor.SetTaskTemplateToEdit(selectedTemplate);
-
             taskTemplateEditor.Visible = true;
+
+            taskTemplateEditor.SetTaskTemplateToEdit(selectedTemplate);
 
             SelectedTaskTemplateChanged?.Invoke(this, selectedTemplate);
         }
