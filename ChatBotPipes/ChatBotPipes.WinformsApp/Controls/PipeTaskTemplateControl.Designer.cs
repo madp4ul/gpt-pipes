@@ -85,7 +85,7 @@ partial class PipeTaskTemplateControl
         // removeButton
         // 
         removeButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-        removeButton.Location = new Point(405, 131);
+        removeButton.Location = new Point(405, 171);
         removeButton.Name = "removeButton";
         removeButton.Size = new Size(93, 23);
         removeButton.TabIndex = 4;
@@ -108,7 +108,7 @@ partial class PipeTaskTemplateControl
         label1.AutoSize = true;
         label1.Location = new Point(3, 3);
         label1.Name = "label1";
-        label1.Size = new Size(32, 15);
+        label1.Size = new Size(36, 15);
         label1.TabIndex = 7;
         label1.Text = "Task:";
         // 
@@ -127,7 +127,7 @@ partial class PipeTaskTemplateControl
         inputMappingPanel.BorderStyle = BorderStyle.Fixed3D;
         inputMappingPanel.Location = new Point(3, 50);
         inputMappingPanel.Name = "inputMappingPanel";
-        inputMappingPanel.Size = new Size(396, 104);
+        inputMappingPanel.Size = new Size(396, 144);
         inputMappingPanel.TabIndex = 9;
         // 
         // PipeTaskTemplateControl
@@ -145,7 +145,7 @@ partial class PipeTaskTemplateControl
         Controls.Add(moveUpButton);
         Controls.Add(insertAboveButton);
         Name = "PipeTaskTemplateControl";
-        Size = new Size(501, 157);
+        Size = new Size(501, 197);
         ResumeLayout(false);
         PerformLayout();
     }

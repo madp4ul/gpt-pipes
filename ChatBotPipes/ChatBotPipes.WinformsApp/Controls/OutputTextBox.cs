@@ -6,10 +6,12 @@ using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 public partial class OutputTextBox : UserControl
 {
@@ -21,6 +23,7 @@ public partial class OutputTextBox : UserControl
         {
             base.Text = value;
             textBox.Text = WithWindowsStyleNewLines(value ?? "");
+            ScrollToEnd();
         }
     }
 
@@ -35,6 +38,12 @@ public partial class OutputTextBox : UserControl
         string withCorrectNewLines = NewLineRegex().Replace(text, Environment.NewLine);
 
         return withCorrectNewLines;
+    }
+
+    public void ScrollToEnd()
+    {
+        textBox.Select(textBox.Text.Length, 0);
+        textBox.ScrollToCaret();
     }
 
     [GeneratedRegex(@"(?<!\r)\n")]
