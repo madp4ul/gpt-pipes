@@ -1,6 +1,6 @@
 ﻿namespace ChatBotPipes.WinformsApp.Forms;
 
-using ChatBotPipes.Core;
+using ChatBotPipes.Core.TaskTemplates;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 public partial class TaskTemplateSelectionForm : Form
 {
-    public ChatBotTaskTemplate? SelectedTaskTemplate { get; private set; }
+    public TaskTemplate? SelectedTaskTemplate { get; private set; }
 
     public TaskTemplateSelectionForm()
     {
@@ -27,7 +27,7 @@ public partial class TaskTemplateSelectionForm : Form
         Close();
     }
 
-    private void TaskManagementPage_SelectedTaskTemplateChanged(object sender, ChatBotTaskTemplate? selection)
+    private void TaskManagementPage_SelectedTaskTemplateChanged(object sender, TaskTemplate? selection)
     {
         takeSelectedTaskTemplateButton.Enabled = selection is not null;
 

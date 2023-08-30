@@ -1,4 +1,5 @@
 ﻿namespace ChatBotPipes.Client;
+using ChatBotPipes.Core.TaskTemplates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,5 +8,5 @@ using System.Threading.Tasks;
 
 public interface IChatBotTaskRunner
 {
-    Task<IChatBotResponse> RunTaskAsync(ChatBotTaskTemplate taskTemplate, TaskVariableValueMap inputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default);
+    Task<IChatBotResponse> RunTaskAsync(TaskTemplate taskTemplate, TaskTemplateValues inputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default);
 }

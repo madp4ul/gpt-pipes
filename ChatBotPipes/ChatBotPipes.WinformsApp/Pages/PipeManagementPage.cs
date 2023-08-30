@@ -1,7 +1,7 @@
 ﻿namespace ChatBotPipes.WinformsApp.Pages;
 
 using ChatBotPipes.Client;
-using ChatBotPipes.Core;
+using ChatBotPipes.Core.Pipes;
 using ChatBotPipes.WinformsApp.Controls;
 using System;
 using System.Collections.Generic;
@@ -15,9 +15,9 @@ using System.Windows.Forms;
 
 public partial class PipeManagementPage : UserControl
 {
-    private IChatBotPipeStore _chatBotPipeStore = null!;
+    private IPipeStore _chatBotPipeStore = null!;
 
-    private List<ChatBotPipe> _pipes = new();
+    private List<Pipe> _pipes = new();
 
     private bool _isLoaded = false;
 
@@ -25,12 +25,12 @@ public partial class PipeManagementPage : UserControl
     {
         InitializeComponent();
 
-        pipesListBox.DisplayMember = nameof(ChatBotPipe.Name);
+        pipesListBox.DisplayMember = nameof(Pipe.Name);
     }
 
     private void InitializeServices()
     {
-        _chatBotPipeStore = Services.Get<IChatBotPipeStore>();
+        _chatBotPipeStore = Services.Get<IPipeStore>();
 
     }
 
@@ -81,8 +81,8 @@ public partial class PipeManagementPage : UserControl
 
     private async Task AddTaskTemplateAsync()
     {
-        var newPipe = new ChatBotPipe(
-            new List<MappedChatBotTaskTemplate> { },
+        var newPipe = new Pipe(
+            new List<PipeTaskTemplateUsage> { },
             "New Pipe");
 
         await _chatBotPipeStore.AddPipeAsync(AppUser.Default, newPipe);
@@ -107,7 +107,7 @@ public partial class PipeManagementPage : UserControl
 
     private void UpdatePipeEditor()
     {
-        if (pipesListBox.SelectedItem is ChatBotPipe selectedPipe)
+        if (pipesListBox.SelectedItem is Pipe selectedPipe)
         {
             pipeEditor.SetPipeToEdit(selectedPipe);
         }
@@ -115,14 +115,14 @@ public partial class PipeManagementPage : UserControl
         pipeEditor.Visible = pipesListBox.SelectedItem is not null;
     }
 
-    private async void PipeEditor_PipeUpdated(object sender, ChatBotPipe pipe)
+    private async void PipeEditor_PipeUpdated(object sender, Pipe pipe)
     {
         await _chatBotPipeStore.UpdatePipeAsync(AppUser.Default, pipe);
 
         UpdatePipeList();
     }
 
-    private async void PipeEditor_PipeDeleted(object sender, ChatBotPipe pipe)
+    private async void PipeEditor_PipeDeleted(object sender, Pipe pipe)
     {
         await _chatBotPipeStore.RemovePipeAsync(AppUser.Default, pipe);
 

@@ -1,6 +1,7 @@
 ﻿namespace ChatBotPipes.Client.Implementation;
 
 using ChatBotPipes.Core;
+using ChatBotPipes.Core.TaskTemplates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ public class ChatBotTaskRunner : IChatBotTaskRunner
         _chatBotProvider = chatBotProvider;
     }
 
-    public async Task<IChatBotResponse> RunTaskAsync(ChatBotTaskTemplate taskTemplate, TaskVariableValueMap inputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default)
+    public async Task<IChatBotResponse> RunTaskAsync(TaskTemplate taskTemplate, TaskTemplateValues inputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default)
     {
         var chatBot = _chatBotProvider.CreateChatBot(taskTemplate.ChatBotName);
 

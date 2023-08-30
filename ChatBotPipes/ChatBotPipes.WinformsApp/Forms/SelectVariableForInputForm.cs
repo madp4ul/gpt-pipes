@@ -1,6 +1,6 @@
 ﻿namespace ChatBotPipes.WinformsApp.Forms;
 
-using ChatBotPipes.Core;
+using ChatBotPipes.Core.Pipes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,18 +13,18 @@ using System.Windows.Forms;
 
 public partial class SelectVariableForInputForm : Form
 {
-    private readonly Dictionary<ListViewGroup, MappedChatBotTaskTemplate?> _groupMap = new();
+    private readonly Dictionary<ListViewGroup, PipeTaskTemplateUsage?> _groupMap = new();
 
-    public Dictionary<MappedChatBotTaskTemplate, List<string>>? Variables { get; private set; }
+    public Dictionary<PipeTaskTemplateUsage, List<string>>? Variables { get; private set; }
 
-    public TaskTemplateVariableName? SelectedVariable { get; private set; }
+    public PipeTaskTemplateVariableReference? SelectedVariable { get; private set; }
 
     public SelectVariableForInputForm()
     {
         InitializeComponent();
     }
 
-    public void SetValidVariables(ChatBotPipe pipe, Dictionary<MappedChatBotTaskTemplate, List<string>> variables)
+    public void SetValidVariables(Pipe pipe, Dictionary<PipeTaskTemplateUsage, List<string>> variables)
     {
         Variables = variables;
 
@@ -71,7 +71,7 @@ public partial class SelectVariableForInputForm : Form
 
         var taskTemplate = _groupMap[group];
 
-        SelectedVariable = taskTemplate is null ? null : new TaskTemplateVariableName(taskTemplate, selectedItem.Text);
+        SelectedVariable = taskTemplate is null ? null : new PipeTaskTemplateVariableReference(taskTemplate, selectedItem.Text);
 
         DialogResult = DialogResult.OK;
         Close();

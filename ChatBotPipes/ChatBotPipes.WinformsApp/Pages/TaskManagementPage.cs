@@ -2,7 +2,7 @@
 
 using ChatBotPipes.Client;
 using ChatBotPipes.Client.Implementation;
-using ChatBotPipes.Core;
+using ChatBotPipes.Core.TaskTemplates;
 using ChatBotPipes.WinformsApp.Controls;
 using System;
 using System.Collections.Generic;
@@ -16,11 +16,11 @@ using System.Windows.Forms;
 
 public partial class TaskManagementPage : UserControl
 {
-    private IChatBotTaskTemplateStore _taskTemplateStore = null!;
+    private ITaskTemplateStore _taskTemplateStore = null!;
 
-    private List<ChatBotTaskTemplate> _taskTemplates = new();
+    private List<TaskTemplate> _taskTemplates = new();
 
-    public event EventHandler<ChatBotTaskTemplate?>? SelectedTaskTemplateChanged;
+    public event EventHandler<TaskTemplate?>? SelectedTaskTemplateChanged;
 
     private bool _canEdit = true;
     public bool CanEdit
@@ -37,7 +37,7 @@ public partial class TaskManagementPage : UserControl
     {
         InitializeComponent();
 
-        taskTemplateListBox.DisplayMember = nameof(ChatBotTaskTemplate.Name);
+        taskTemplateListBox.DisplayMember = nameof(TaskTemplate.Name);
 
         SetControlsEditable();
     }
@@ -49,7 +49,7 @@ public partial class TaskManagementPage : UserControl
             return;
         }
 
-        _taskTemplateStore = Services.Get<IChatBotTaskTemplateStore>();
+        _taskTemplateStore = Services.Get<ITaskTemplateStore>();
 
         _taskTemplates = await _taskTemplateStore.GetTaskTemplatesAsync(AppUser.Default);
 
@@ -74,7 +74,7 @@ public partial class TaskManagementPage : UserControl
 
     private async Task AddTaskTemplateAsync()
     {
-        var newTaskTemplate = new ChatBotTaskTemplate(
+        var newTaskTemplate = new TaskTemplate(
             new List<ChatMessage> { new ChatMessage("System message", ChatMessageAuthor.System) },
             "New Task",
             null);
@@ -96,7 +96,7 @@ public partial class TaskManagementPage : UserControl
 
     private void TaskTemplateListBox_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (taskTemplateListBox.SelectedItem is ChatBotTaskTemplate selectedTemplate)
+        if (taskTemplateListBox.SelectedItem is TaskTemplate selectedTemplate)
         {
             taskTemplateEditor.Visible = true;
 
@@ -112,14 +112,14 @@ public partial class TaskManagementPage : UserControl
         }
     }
 
-    private async void TaskTemplateEditor_TaskTemplateUpdated(object sender, ChatBotTaskTemplate e)
+    private async void TaskTemplateEditor_TaskTemplateUpdated(object sender, TaskTemplate e)
     {
         await _taskTemplateStore.UpdateTaskTemplateAsync(AppUser.Default, e);
 
         UpdateTaskTemplateList();
     }
 
-    private async void TaskTemplateEditor_TaskTemplateDeleted(object sender, ChatBotTaskTemplate template)
+    private async void TaskTemplateEditor_TaskTemplateDeleted(object sender, TaskTemplate template)
     {
         await _taskTemplateStore.RemoveTaskTemplateAsync(AppUser.Default, template);
 

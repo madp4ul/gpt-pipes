@@ -2,6 +2,7 @@
 
 using ChatBotPipes.Client;
 using ChatBotPipes.Core;
+using ChatBotPipes.Core.TaskTemplates;
 using ChatBotPipes.WinformsApp.Controls;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,9 @@ public partial class TaskRunnerForm : Form
 
     private CancellationTokenSource? _cancellationTokenSource;
 
-    public ChatBotTaskTemplate? TaskTemplate { get; private set; }
+    public TaskTemplate? TaskTemplate { get; private set; }
 
-    private TaskVariableValueMap? _taskVariableValueMap;
+    private TaskTemplateValues? _taskVariableValueMap;
 
     public TaskRunnerForm()
     {
@@ -37,10 +38,10 @@ public partial class TaskRunnerForm : Form
         }
     }
 
-    public void SetTaskTemplate(ChatBotTaskTemplate taskTemplate)
+    public void SetTaskTemplate(TaskTemplate taskTemplate)
     {
         TaskTemplate = taskTemplate;
-        _taskVariableValueMap = new TaskVariableValueMap();
+        _taskVariableValueMap = new TaskTemplateValues();
 
         nameLabel.Text = taskTemplate.Name;
         Text = $"Run Task \"{taskTemplate.Name}\"";
@@ -48,7 +49,7 @@ public partial class TaskRunnerForm : Form
         UpdateUserInputControls(taskTemplate);
     }
 
-    private void UpdateUserInputControls(ChatBotTaskTemplate taskTemplate)
+    private void UpdateUserInputControls(TaskTemplate taskTemplate)
     {
         foreach (var control in userInputPanel.Rows.OfType<UserTaskInputControl>())
         {

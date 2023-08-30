@@ -18,9 +18,9 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddSingleton<IAppDataFileService, AppDataFileService>();
         serviceCollection.AddSingleton<IUserDataFileService, UserDataFileService>();
 
-        serviceCollection.AddSingleton<IApiKeyStore, FilebasedApiKeyStore>();
-        serviceCollection.AddSingleton<IChatBotTaskTemplateStore, FilebasedChatBotTaskTemplateStore>();
-        serviceCollection.AddSingleton<IChatBotPipeStore, FilebasedChatBotPipeStore>();
+        serviceCollection.AddSingleton<IApiKeyStore, LocalFileApiKeyStore>();
+        serviceCollection.AddSingleton<ITaskTemplateStore, LocalFileTaskTemplateStore>();
+        serviceCollection.AddSingleton<IPipeStore, LocalFilePipeStore>();
 
         return serviceCollection;
     }

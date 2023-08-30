@@ -1,7 +1,7 @@
 ﻿namespace ChatBotPipes.ChatGPTBot;
 
 using ChatBotPipes.Client;
-using ChatBotPipes.Core;
+using ChatBotPipes.Core.TaskTemplates;
 using OpenAI_API.Chat;
 using System.Threading.Tasks;
 
@@ -74,7 +74,7 @@ public class ChatGptChatBot : IChatBot
         return conversation;
     }
 
-    private static ChatMessageRole GetRole(Core.ChatMessage instruction)
+    private static ChatMessageRole GetRole(Core.TaskTemplates.ChatMessage instruction)
     {
         return instruction.Author switch
         {

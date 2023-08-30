@@ -1,6 +1,7 @@
 ﻿namespace ChatBotPipes.Core;
 
 using ChatBotPipes.Core.Implementation;
+using ChatBotPipes.Core.TaskTemplates;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

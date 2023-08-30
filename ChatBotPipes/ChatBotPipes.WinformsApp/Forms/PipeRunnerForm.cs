@@ -1,7 +1,7 @@
 ﻿namespace ChatBotPipes.WinformsApp.Forms;
 using ChatBotPipes.Client;
-
-using ChatBotPipes.Core;
+using ChatBotPipes.Core.Pipes;
+using ChatBotPipes.Core.TaskTemplates;
 using ChatBotPipes.WinformsApp.Controls;
 using System;
 using System.Collections.Generic;
@@ -20,11 +20,11 @@ public partial class PipeRunnerForm : Form
     private readonly ITaskTemplateFiller _taskTemplateFiller = null!;
     private CancellationTokenSource? _cancellationTokenSource;
 
-    public ChatBotPipe? Pipe { get; private set; }
+    public Pipe? Pipe { get; private set; }
 
-    private PipeVariableValueMap? _pipeVariableValueMap;
+    private PipeTemplateValues? _pipeVariableValueMap;
 
-    private readonly Dictionary<MappedChatBotTaskTemplate, PipeRunnerTaskControl> _pipeRunnerTaskControls = new();
+    private readonly Dictionary<PipeTaskTemplateUsage, PipeRunnerTaskOutputControl> _pipeRunnerTaskControls = new();
 
     public PipeRunnerForm()
     {
@@ -37,10 +37,10 @@ public partial class PipeRunnerForm : Form
         }
     }
 
-    public void SetPipe(ChatBotPipe pipe)
+    public void SetPipe(Pipe pipe)
     {
         Pipe = pipe;
-        _pipeVariableValueMap = new PipeVariableValueMap();
+        _pipeVariableValueMap = new PipeTemplateValues();
 
         this.Text = $"Run pipe \"{pipe.Name}\"";
         pipeNameLabel.Text = pipe.Name;
@@ -49,9 +49,9 @@ public partial class PipeRunnerForm : Form
         CreateTaskControls(pipe);
     }
 
-    private void UpdateUserInputControls(ChatBotPipe pipe)
+    private void UpdateUserInputControls(Pipe pipe)
     {
-        foreach (var control in userInputPanel.Rows.OfType<UserPipeInputControl>())
+        foreach (var control in userInputPanel.Rows.OfType<PipeRunnerVariableUserInputControl>())
         {
             control.UserInputChanged -= UserInputControl_UserInputChanged;
         }
@@ -60,9 +60,9 @@ public partial class PipeRunnerForm : Form
 
         var inputs = pipe.GetRequiredInputs(_taskTemplateFiller);
 
-        foreach (TaskTemplateVariableName input in inputs)
+        foreach (PipeTaskTemplateVariableReference input in inputs)
         {
-            var userInputControl = new UserPipeInputControl();
+            var userInputControl = new PipeRunnerVariableUserInputControl();
 
             userInputControl.SetUserInputName(input);
             userInputControl.UserInputChanged += UserInputControl_UserInputChanged;
@@ -71,18 +71,18 @@ public partial class PipeRunnerForm : Form
         }
     }
 
-    private void UserInputControl_UserInputChanged(object? sender, UserPipeInputControl.PipeInputChange inputChange)
+    private void UserInputControl_UserInputChanged(object? sender, PipeRunnerVariableUserInputControl.PipeInputChange inputChange)
     {
         ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
 
         _pipeVariableValueMap.AddInputValue(inputChange.InputName, inputChange.UserInputValue);
     }
 
-    private void CreateTaskControls(ChatBotPipe pipe)
+    private void CreateTaskControls(Pipe pipe)
     {
         foreach (var taskMapping in pipe.Tasks)
         {
-            var taskControl = new PipeRunnerTaskControl();
+            var taskControl = new PipeRunnerTaskOutputControl();
 
             taskControl.SetTaskTemplate(taskMapping.TaskTemplate);
 
@@ -137,7 +137,7 @@ public partial class PipeRunnerForm : Form
         runButton.Enabled = enabled;
         cancelButton.Enabled = !enabled;
 
-        foreach (var control in userInputPanel.Rows.OfType<UserPipeInputControl>())
+        foreach (var control in userInputPanel.Rows.OfType<PipeRunnerVariableUserInputControl>())
         {
             control.Enabled = enabled;
         }
