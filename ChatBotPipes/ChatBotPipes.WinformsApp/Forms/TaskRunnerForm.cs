@@ -28,7 +28,7 @@ public partial class TaskRunnerForm : Form
     {
         InitializeComponent();
 
-        outputTextBox.OutputText = "";
+        outputTextBox.Text = "";
 
         if (!DesignMode)
         {
@@ -102,7 +102,7 @@ public partial class TaskRunnerForm : Form
         ArgumentNullException.ThrowIfNull(TaskTemplate);
         ArgumentNullException.ThrowIfNull(_taskVariableValueMap);
 
-        outputTextBox.OutputText = "";
+        outputTextBox.Text = "";
 
         var response = await _taskRunner.RunTaskAsync(TaskTemplate, _taskVariableValueMap, _taskTemplateFiller, cancellationToken);
 
@@ -126,7 +126,7 @@ public partial class TaskRunnerForm : Form
 
     private void Response_DataReceived(string additionalText)
     {
-        outputTextBox.OutputText += additionalText;
+        outputTextBox.Text += additionalText;
     }
 
     private void ButtonCancel_Click(object sender, EventArgs e)

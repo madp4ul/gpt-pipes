@@ -38,14 +38,14 @@ public partial class PipeRunnerTaskControl : UserControl
     {
         Clear();
 
-        outputTextBox.OutputText = chatBotResponse.GetCurrentResponse();
+        outputTextBox.Text = chatBotResponse.GetCurrentResponse();
 
         chatBotResponse.DataReceived += ChatBotResponse_DataReceived;
         updateOutputTimer.Start();
 
         try
         {
-            outputTextBox.OutputText = await chatBotResponse.AwaitCompletionAsync();
+            outputTextBox.Text = await chatBotResponse.AwaitCompletionAsync();
         }
         catch (OperationCanceledException)
         { }
@@ -59,7 +59,7 @@ public partial class PipeRunnerTaskControl : UserControl
     public void Clear()
     {
         _outputStringBuilder.Clear();
-        outputTextBox.OutputText = "";
+        outputTextBox.Text = "";
     }
 
     private void ChatBotResponse_DataReceived(string additonalText)
@@ -83,6 +83,6 @@ public partial class PipeRunnerTaskControl : UserControl
 
     private void UpdateOutputTimer_Tick(object sender, EventArgs e)
     {
-        outputTextBox.OutputText = _outputStringBuilder.ToString();
+        outputTextBox.Text = _outputStringBuilder.ToString();
     }
 }

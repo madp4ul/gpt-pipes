@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,27 +13,30 @@ using System.Windows.Forms;
 
 public partial class OutputTextBox : UserControl
 {
-    public string OutputText
+    [AllowNull]
+    public override string Text
     {
-        get => textBox.Text;
+        get => base.Text;
         set
         {
-            textBox.Text = ConvertNewLines(value);
+            base.Text = value;
+            textBox.Text = WithWindowsStyleNewLines(value ?? "");
         }
     }
 
     public OutputTextBox()
     {
         InitializeComponent();
+        textBox.Text = Text;
     }
 
-    private string ConvertNewLines(string text)
+    private string WithWindowsStyleNewLines(string text)
     {
         string withCorrectNewLines = NewLineRegex().Replace(text, Environment.NewLine);
 
         return withCorrectNewLines;
     }
 
-    [GeneratedRegex("\n")]
+    [GeneratedRegex(@"(?<!\r)\n")]
     private static partial Regex NewLineRegex();
 }

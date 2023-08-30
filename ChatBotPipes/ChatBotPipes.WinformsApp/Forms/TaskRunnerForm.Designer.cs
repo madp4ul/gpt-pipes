@@ -68,7 +68,7 @@ partial class TaskRunnerForm
         outputTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         outputTextBox.Location = new Point(6, 354);
         outputTextBox.Name = "outputTextBox";
-        outputTextBox.OutputText = "";
+        outputTextBox.Text = "";
         outputTextBox.Size = new Size(553, 489);
         outputTextBox.TabIndex = 7;
         // 

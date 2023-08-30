@@ -60,7 +60,7 @@ partial class PipeRunnerTaskControl
         outputTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         outputTextBox.Location = new Point(3, 34);
         outputTextBox.Name = "outputTextBox";
-        outputTextBox.OutputText = "";
+        outputTextBox.Text = "";
         outputTextBox.Size = new Size(504, 330);
         outputTextBox.TabIndex = 3;
         // 
