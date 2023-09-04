@@ -49,9 +49,11 @@ public partial class PipeEditor : UserControl
 
     private void UnsubscribeEvents(PipeTaskTemplateControl control)
     {
-        control.InsertAboveRequested -= Control_InsertAboveRequested;
-        control.MoveUpRequested -= Control_MoveUpRequested;
-        control.MoveDownRequested -= Control_MoveDownRequested;
+        control.InsertAboveRequested += Control_InsertAboveRequested;
+        control.MoveUpRequested += Control_MoveUpRequested;
+        control.MoveDownRequested += Control_MoveDownRequested;
+        control.RemoveRequested += Control_RemoveRequested;
+        control.InputMappingUpdated += Control_InputMappingUpdated;
     }
 
     private void UpdatePipe(Action<Pipe> updateAction)
@@ -194,15 +196,33 @@ public partial class PipeEditor : UserControl
     {
         UpdatePipe(pipe =>
         {
+            var control = (PipeTaskTemplateControl)sender!;
+
             int index = pipe.Tasks.IndexOf(currentTaskTemplate);
             pipe.Tasks.RemoveAt(index);
 
-            var control = (PipeTaskTemplateControl)sender!;
+            foreach (var task in pipe.Tasks)
+            {
+                var invalidVariableReferences = task.InputMapping
+                    .Where(kv => !pipe.Tasks.Contains(kv.Value.TaskTemplate))
+                    .ToList();
+
+                invalidVariableReferences.ForEach(r => task.InputMapping.Remove(r.Key));
+
+                var referencingControl = GetControlForTaskUsage(task);
+                referencingControl?.SetTaskTemplate(task, pipe); // Trigger update of task values because the input mapping has changed.
+            }
+
             UnsubscribeEvents(control);
 
             taskTemplatePanel.RemoveRow(control);
         });
     }
+
+    private PipeTaskTemplateControl? GetControlForTaskUsage(PipeTaskTemplateUsage taskTemplateUsage)
+        => taskTemplatePanel.Rows
+            .OfType<PipeTaskTemplateControl>()
+            .FirstOrDefault(c => c.TaskTemplateMapping == taskTemplateUsage);
 
     private void RunPipeButton_Click(object sender, EventArgs e)
     {
