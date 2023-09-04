@@ -75,7 +75,7 @@ public partial class PipeRunnerForm : Form
     {
         ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
 
-        _pipeVariableValueMap.AddInputValue(inputChange.InputName, inputChange.UserInputValue);
+        _pipeVariableValueMap.SetInputValue(inputChange.InputName, inputChange.UserInputValue);
     }
 
     private void CreateTaskControls(Pipe pipe)
@@ -119,10 +119,10 @@ public partial class PipeRunnerForm : Form
         ArgumentNullException.ThrowIfNull(Pipe);
         ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
 
-        var responseEnumerable = _pipeRunner.RunPipeAsync(Pipe, _pipeVariableValueMap, _taskTemplateFiller, cancellationToken);
+        var result = _pipeRunner.RunPipeAsync(Pipe, _pipeVariableValueMap, _taskTemplateFiller, cancellationToken);
 
         int index = 0;
-        await foreach (var pipeResponse in responseEnumerable)
+        await foreach (var pipeResponse in result.TaskResponses)
         {
             var control = _pipeRunnerTaskControls[pipeResponse.Task];
 

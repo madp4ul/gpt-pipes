@@ -51,7 +51,7 @@ public record Pipe
 
     private bool HasValidInputMapping(PipeTaskTemplateUsage currentTaskTemplate, string currentInput, ITaskTemplateFiller templateFiller)
     {
-        if (!currentTaskTemplate.InputMapping.TryGetValue(currentInput, out PipeTaskTemplateVariableReference? referencedVariable))
+        if (!currentTaskTemplate.InputVariableReferences.TryGetValue(currentInput, out PipeTaskTemplateVariableReference? referencedVariable))
         {
             // There is no input mapping for the given input
             return false;
@@ -67,8 +67,8 @@ public record Pipe
             return false;
         }
 
-        var variablesOfReferencedTaskTemplate = referencedVariable.TaskTemplate.TaskTemplate.GetReferencibleVariableNames(templateFiller);
-        if (!variablesOfReferencedTaskTemplate.Contains(referencedVariable.InputName))
+        var variablesOfReferencedTaskTemplate = referencedVariable.ReferencedTaskTemplate.TaskTemplate.GetReferencibleVariableNames(templateFiller);
+        if (!variablesOfReferencedTaskTemplate.Contains(referencedVariable.ReferencedVariableName))
         {
             // The referenced variable does not exist (anymore?) in the referenced task template.
             return false;
@@ -77,6 +77,6 @@ public record Pipe
         return true;
 
         bool IsBeforeCurrentTaskTemplate(PipeTaskTemplateUsage t) => t != currentTaskTemplate;
-        bool IsReferencedTaskTemplate(PipeTaskTemplateUsage t) => t == referencedVariable?.TaskTemplate;
+        bool IsReferencedTaskTemplate(PipeTaskTemplateUsage t) => t == referencedVariable?.ReferencedTaskTemplate;
     }
 }

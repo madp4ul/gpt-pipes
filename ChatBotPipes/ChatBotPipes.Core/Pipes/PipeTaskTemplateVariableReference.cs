@@ -8,4 +8,4 @@ using System.Threading.Tasks;
 /// <summary>
 ///     References a variable that is defined in context of a specific task template.
 /// </summary>
-public record PipeTaskTemplateVariableReference(PipeTaskTemplateUsage TaskTemplate, string InputName);
+public record PipeTaskTemplateVariableReference(PipeTaskTemplateUsage ReferencedTaskTemplate, string ReferencedVariableName);

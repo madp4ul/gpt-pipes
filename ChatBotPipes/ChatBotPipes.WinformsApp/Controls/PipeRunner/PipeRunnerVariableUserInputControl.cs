@@ -27,7 +27,7 @@ public partial class PipeRunnerVariableUserInputControl : UserControl
     {
         UserInputName = taskVariableName;
 
-        userTaskInputControl.SetUserInputName($"{taskVariableName.InputName} for '{taskVariableName.TaskTemplate.TaskTemplate.Name}':");
+        userTaskInputControl.SetUserInputName($"{taskVariableName.ReferencedVariableName} for '{taskVariableName.ReferencedTaskTemplate.TaskTemplate.Name}':");
     }
 
     private void UserTaskInputControl_UserInputChanged(object sender, UserTaskInputControl.InputChange e)

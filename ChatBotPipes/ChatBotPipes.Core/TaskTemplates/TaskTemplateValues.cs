@@ -21,11 +21,18 @@ public class TaskTemplateValues
         }
 
         AddValue(inputName, value);
+
+        RemoveOutputValue(); // changing an input invalidates the output.
     }
 
     public void AddOutputValue(string value)
     {
         AddValue(OutputKey, value);
+    }
+
+    public void RemoveOutputValue()
+    {
+        _mapping.Remove(OutputKey);
     }
 
     private void AddValue(string inputName, string value)

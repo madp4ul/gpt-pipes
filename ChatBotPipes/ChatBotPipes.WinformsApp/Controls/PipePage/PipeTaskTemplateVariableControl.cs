@@ -47,9 +47,9 @@ public partial class PipeTaskTemplateVariableControl : UserControl
             return "user input";
         }
 
-        string taskName = data.SourcePipe.GetTaskNameInContext(data.VariableReference.TaskTemplate);
+        string taskName = data.SourcePipe.GetTaskNameInContext(data.VariableReference.ReferencedTaskTemplate);
 
-        return $"{data.VariableReference.InputName} from '{taskName}'";
+        return $"{data.VariableReference.ReferencedVariableName} from '{taskName}'";
     }
 
     private void UpdateVariableReferenceButton_Click(object sender, EventArgs e)

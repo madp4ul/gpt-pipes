@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 public interface IChatBotPipeRunner
 {
-    IAsyncEnumerable<PipeTaskResponse> RunPipeAsync(Pipe pipe, PipeTemplateValues userInputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default);
+    RunPipeResult RunPipeAsync(Pipe pipe, PipeTemplateValues userInputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default);
 }

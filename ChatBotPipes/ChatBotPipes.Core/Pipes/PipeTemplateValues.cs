@@ -14,18 +14,42 @@ public class PipeTemplateValues
         .SelectMany(kv => kv.Value.MappedInputs.Select(mi => new PipeTaskTemplateVariableReference(kv.Key, mi)))
         .ToList();
 
-    public void AddInputValue(PipeTaskTemplateVariableReference templateVariable, string value)
+    public void SetInputValue(PipeTaskTemplateVariableReference templateVariable, string value)
     {
-        var taskValues = GetTaskValues(templateVariable.TaskTemplate);
+        var taskValues = GetTaskValues(templateVariable.ReferencedTaskTemplate);
+        RemoveOutputValue(templateVariable.ReferencedTaskTemplate); // changing an input invalidates the output.
 
-        taskValues.AddInputValue(templateVariable.InputName, value);
+        taskValues.AddInputValue(templateVariable.ReferencedVariableName, value);
+
     }
 
-    public void AddOutputValue(PipeTaskTemplateUsage taskTemplate, string value)
+    public void SetOutputValue(PipeTaskTemplateUsage taskTemplate, string value)
     {
         var taskValues = GetTaskValues(taskTemplate);
 
         taskValues.AddOutputValue(value);
+    }
+
+    public void RemoveOutputValue(PipeTaskTemplateUsage taskTemplate)
+    {
+        var values = GetTaskValues(taskTemplate);
+
+        values.RemoveOutputValue();
+
+        foreach (var otherTaskUsage in _mapping.Keys)
+        {
+            bool referencesRemovedOutputValue = otherTaskUsage.InputVariableReferences.Values
+                .Any(ReferencesRemovedOutputValue);
+
+            if (referencesRemovedOutputValue)
+            {
+                RemoveOutputValue(otherTaskUsage);
+            }
+        }
+
+        bool ReferencesRemovedOutputValue(PipeTaskTemplateVariableReference variableReference)
+            => variableReference.ReferencedVariableName == TaskTemplateValues.OutputKey
+            && variableReference.ReferencedTaskTemplate == taskTemplate;
     }
 
     public TaskTemplateValues Get(PipeTaskTemplateUsage taskTemplate)
@@ -44,10 +68,10 @@ public class PipeTemplateValues
     }
 
     public string Get(PipeTaskTemplateVariableReference taskTemplateVariable)
-        => Get(taskTemplateVariable.TaskTemplate).Get(taskTemplateVariable.InputName);
+        => Get(taskTemplateVariable.ReferencedTaskTemplate).Get(taskTemplateVariable.ReferencedVariableName);
 
     public bool Has(PipeTaskTemplateVariableReference taskTemplateVariable)
-        => Get(taskTemplateVariable.TaskTemplate).Has(taskTemplateVariable.InputName);
+        => Get(taskTemplateVariable.ReferencedTaskTemplate).Has(taskTemplateVariable.ReferencedVariableName);
 
     public PipeTemplateValues CopyMap()
     {
