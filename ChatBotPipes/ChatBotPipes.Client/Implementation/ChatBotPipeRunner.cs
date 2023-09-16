@@ -19,12 +19,14 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
         _taskRunner = taskRunner ?? throw new ArgumentNullException(nameof(taskRunner));
     }
 
-    public IAsyncEnumerable<PipeTaskResponse> RunPipeAsync(Pipe pipe, PipeTemplateValues userInputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default)
+    public RunPipeResult RunPipeAsync(Pipe pipe, PipeTemplateValues userInputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default)
     {
-        var variableValues = userInputs.CopyMap(); // Copy to not modify users instance of their inputs.
+        //var variableValues = userInputs.CopyMap(); // Copy to not modify users instance of their inputs.
 
-        // If problems with parallelized running occur, switch back to sequencial approach.
-        return RunPipeParallelizedAsync(pipe, variableValues, taskTemplateFiller, cancellationToken);
+        // If problems with parallelized running occur, switch back to sequencial approach. --> done.
+        var taskResponses = RunPipeSequenciallyAsync(pipe, userInputs, taskTemplateFiller, cancellationToken);
+
+        return new RunPipeResult(taskResponses, userInputs);
     }
 
     private async IAsyncEnumerable<PipeTaskResponse> RunPipeParallelizedAsync(Pipe pipe, PipeTemplateValues variableValues, ITaskTemplateFiller taskTemplateFiller, [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -77,7 +79,7 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
         {
             string output = await pipeResponse.Response.AwaitCompletionAsync();
 
-            variableValues.AddOutputValue(pipeResponse.Task, output);
+            variableValues.SetOutputValue(pipeResponse.Task, output);
 
             return null; // We also have to await this, but this does not produce a value to be yielded.
         }
@@ -85,24 +87,36 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
 
     public async IAsyncEnumerable<PipeTaskResponse> RunPipeSequenciallyAsync(Pipe pipe, PipeTemplateValues userInputs, ITaskTemplateFiller taskTemplateFiller, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var variableValues = userInputs.CopyMap(); // Copy to not modify users instance of their inputs.
-
         foreach (var task in pipe.Tasks)
         {
-            TaskTemplateValues taskVariableValues = GetTaskVariableValues(variableValues, task);
+            TaskTemplateValues taskVariableValues = GetTaskVariableValues(userInputs, task);
+
+            if (taskVariableValues.HasOutput())
+            {
+                continue;
+            }
 
             var response = await _taskRunner.RunTaskAsync(task.TaskTemplate, taskVariableValues, taskTemplateFiller, cancellationToken);
 
             yield return new PipeTaskResponse(task, response);
 
-            var output = await response.AwaitCompletionAsync();
-
-            taskVariableValues.AddOutputValue(output);
+            try
+            {
+                await response.AwaitCompletionAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            finally
+            {
+                taskVariableValues.AddOutputValue(response.GetCurrentResponse());
+            }
         }
     }
 
     private static bool HasAllInputsProvided(PipeTemplateValues variableValues, PipeTaskTemplateUsage task)
-        => task.InputMapping.All(i => variableValues.Has(i.Value));
+        => task.InputVariableReferences.All(i => variableValues.Has(i.Value));
 
     private static TaskTemplateValues GetTaskVariableValues(PipeTemplateValues variableValues, PipeTaskTemplateUsage task)
     {
@@ -110,7 +124,7 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
 
         TaskTemplateValues taskValueMap = variableValues.Get(task);
 
-        foreach (var (inputName, VariableReference) in task.InputMapping)
+        foreach (var (inputName, VariableReference) in task.InputVariableReferences)
         {
             string referencedValue = variableValues.Get(VariableReference);
 

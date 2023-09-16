@@ -12,5 +12,5 @@ using System.Threading.Tasks;
 ///     If an input of the task template does not have a matching reference, its value has to be provided by the user at runtime.
 /// </summary>
 /// <param name="TaskTemplate">The task template itself.</param>
-/// <param name="InputMapping">Variable references. The key in this dictionary is the name of the input in <see cref="TaskTemplate"/>, the value describes where the value is coming from.</param>
-public record PipeTaskTemplateUsage(TaskTemplate TaskTemplate, Dictionary<string, PipeTaskTemplateVariableReference> InputMapping);
+/// <param name="InputVariableReferences">Variable references. The key in this dictionary is the name of the input in <see cref="TaskTemplate"/>, the value describes where the value is coming from.</param>
+public record PipeTaskTemplateUsage(TaskTemplate TaskTemplate, Dictionary<string, PipeTaskTemplateVariableReference> InputVariableReferences);

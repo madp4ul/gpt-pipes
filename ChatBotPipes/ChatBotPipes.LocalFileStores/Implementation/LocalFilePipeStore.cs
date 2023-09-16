@@ -124,15 +124,15 @@ public class LocalFilePipeStore : IPipeStore
         foreach (var task in pipe.Tasks)
         {
             var reference = new TaskTemplateReference(task.TaskTemplate.Id);
-            var inputMapping = task.InputMapping
+            var inputMapping = task.InputVariableReferences
                 .ToDictionary(kv => kv.Key, kv => ToStoredTaskTemplateVariableName(kv.Value));
 
             storedMappedTaskTemplateReferences.Add(new StoredMappedChatBotTaskTemplate(reference, inputMapping));
 
             StoredTaskTemplateVariableName ToStoredTaskTemplateVariableName(PipeTaskTemplateVariableReference variableName)
             {
-                int index = pipe.Tasks.IndexOf(variableName.TaskTemplate);
-                return new StoredTaskTemplateVariableName(new MappedTaskTemplateReference(variableName.TaskTemplate.TaskTemplate.Id, index), variableName.InputName);
+                int index = pipe.Tasks.IndexOf(variableName.ReferencedTaskTemplate);
+                return new StoredTaskTemplateVariableName(new MappedTaskTemplateReference(variableName.ReferencedTaskTemplate.TaskTemplate.Id, index), variableName.ReferencedVariableName);
             }
         }
 

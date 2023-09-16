@@ -66,7 +66,7 @@ public partial class PipeTaskTemplateControl : UserControl
         {
             var control = new PipeTaskTemplateVariableControl();
 
-            var variableReference = taskTemplateMapping.InputMapping.GetValueOrDefault(input);
+            var variableReference = taskTemplateMapping.InputVariableReferences.GetValueOrDefault(input);
 
             var data = new PipeTaskTemplateVariableControl.PipeInputMappingControlData(input, variableReference, taskTemplateMapping, sourcePipe);
 
@@ -85,11 +85,11 @@ public partial class PipeTaskTemplateControl : UserControl
 
         if (mapping.VariableReference is null)
         {
-            TaskTemplateMapping.InputMapping.Remove(mapping.InputName);
+            TaskTemplateMapping.InputVariableReferences.Remove(mapping.InputName);
         }
         else
         {
-            TaskTemplateMapping.InputMapping[mapping.InputName] = mapping.VariableReference;
+            TaskTemplateMapping.InputVariableReferences[mapping.InputName] = mapping.VariableReference;
         }
 
         UpdateInputMappingControls(TaskTemplateMapping, SourcePipe);
