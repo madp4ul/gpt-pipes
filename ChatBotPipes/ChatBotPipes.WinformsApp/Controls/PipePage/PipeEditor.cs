@@ -203,11 +203,11 @@ public partial class PipeEditor : UserControl
 
             foreach (var task in pipe.Tasks)
             {
-                var invalidVariableReferences = task.InputMapping
-                    .Where(kv => !pipe.Tasks.Contains(kv.Value.TaskTemplate))
+                var invalidVariableReferences = task.InputVariableReferences
+                    .Where(kv => !pipe.Tasks.Contains(kv.Value.ReferencedTaskTemplate))
                     .ToList();
 
-                invalidVariableReferences.ForEach(r => task.InputMapping.Remove(r.Key));
+                invalidVariableReferences.ForEach(r => task.InputVariableReferences.Remove(r.Key));
 
                 var referencingControl = GetControlForTaskUsage(task);
                 referencingControl?.SetTaskTemplate(task, pipe); // Trigger update of task values because the input mapping has changed.
