@@ -21,12 +21,12 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
 
     public RunPipeResult RunPipeAsync(Pipe pipe, PipeTemplateValues userInputs, ITaskTemplateFiller taskTemplateFiller, CancellationToken cancellationToken = default)
     {
-        var variableValues = userInputs.CopyMap(); // Copy to not modify users instance of their inputs.
+        //var variableValues = userInputs.CopyMap(); // Copy to not modify users instance of their inputs.
 
         // If problems with parallelized running occur, switch back to sequencial approach. --> done.
-        var taskResponses = RunPipeParallelizedAsync(pipe, variableValues, taskTemplateFiller, cancellationToken);
+        var taskResponses = RunPipeSequenciallyAsync(pipe, userInputs, taskTemplateFiller, cancellationToken);
 
-        return new RunPipeResult(taskResponses, variableValues);
+        return new RunPipeResult(taskResponses, userInputs);
     }
 
     private async IAsyncEnumerable<PipeTaskResponse> RunPipeParallelizedAsync(Pipe pipe, PipeTemplateValues variableValues, ITaskTemplateFiller taskTemplateFiller, [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -87,19 +87,31 @@ public class ChatBotPipeRunner : IChatBotPipeRunner
 
     public async IAsyncEnumerable<PipeTaskResponse> RunPipeSequenciallyAsync(Pipe pipe, PipeTemplateValues userInputs, ITaskTemplateFiller taskTemplateFiller, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var variableValues = userInputs.CopyMap(); // Copy to not modify users instance of their inputs.
-
         foreach (var task in pipe.Tasks)
         {
-            TaskTemplateValues taskVariableValues = GetTaskVariableValues(variableValues, task);
+            TaskTemplateValues taskVariableValues = GetTaskVariableValues(userInputs, task);
+
+            if (taskVariableValues.HasOutput())
+            {
+                continue;
+            }
 
             var response = await _taskRunner.RunTaskAsync(task.TaskTemplate, taskVariableValues, taskTemplateFiller, cancellationToken);
 
             yield return new PipeTaskResponse(task, response);
 
-            var output = await response.AwaitCompletionAsync();
-
-            taskVariableValues.AddOutputValue(output);
+            try
+            {
+                await response.AwaitCompletionAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            finally
+            {
+                taskVariableValues.AddOutputValue(response.GetCurrentResponse());
+            }
         }
     }
 

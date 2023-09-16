@@ -20,9 +20,14 @@ public class TaskTemplateValues
             throw new ArgumentException($"Can not add input with key {OutputKey}");
         }
 
-        AddValue(inputName, value);
+        bool isDifferentValue = !_mapping.TryGetValue(inputName, out var existingInputValue) || existingInputValue != value;
 
-        RemoveOutputValue(); // changing an input invalidates the output.
+        if (isDifferentValue)
+        {
+            AddValue(inputName, value);
+
+            RemoveOutputValue(); // changing an input invalidates the output.
+        }
     }
 
     public void AddOutputValue(string value)
@@ -33,6 +38,12 @@ public class TaskTemplateValues
     public void RemoveOutputValue()
     {
         _mapping.Remove(OutputKey);
+    }
+
+    public void RemoveValue(string valueName)
+    {
+        _mapping.Remove(valueName);
+        RemoveOutputValue();
     }
 
     private void AddValue(string inputName, string value)
@@ -59,6 +70,9 @@ public class TaskTemplateValues
 
     public bool Has(string key)
         => _mapping.ContainsKey(key);
+
+    public bool HasOutput()
+        => _mapping.ContainsKey(OutputKey);
 
     public TaskTemplateValues CopyMap()
     {

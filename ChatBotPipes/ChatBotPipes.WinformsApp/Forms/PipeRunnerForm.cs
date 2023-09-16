@@ -58,13 +58,13 @@ public partial class PipeRunnerForm : Form
 
         userInputPanel.ClearRows();
 
-        var inputs = pipe.GetRequiredInputs(_taskTemplateFiller);
+        var inputVariables = pipe.GetRequiredInputs(_taskTemplateFiller);
 
-        foreach (PipeTaskTemplateVariableReference input in inputs)
+        foreach (PipeTaskTemplateVariableReference inputVariable in inputVariables)
         {
             var userInputControl = new PipeRunnerVariableUserInputControl();
 
-            userInputControl.SetUserInputName(input);
+            userInputControl.SetReferencedVariable(inputVariable);
             userInputControl.UserInputChanged += UserInputControl_UserInputChanged;
 
             userInputPanel.AddRow(userInputControl);
@@ -80,27 +80,48 @@ public partial class PipeRunnerForm : Form
 
     private void CreateTaskControls(Pipe pipe)
     {
-        foreach (var taskMapping in pipe.Tasks)
+        foreach (var taskTemplateUsage in pipe.Tasks)
         {
             var taskControl = new PipeRunnerTaskOutputControl();
 
-            taskControl.SetTaskTemplate(taskMapping.TaskTemplate);
+            taskControl.SetTaskTemplate(taskTemplateUsage);
 
-            _pipeRunnerTaskControls.Add(taskMapping, taskControl);
+            taskControl.RegenerateOutputRequested += TaskControl_RegenerateOutputRequested;
+
+            _pipeRunnerTaskControls.Add(taskTemplateUsage, taskControl);
             outputPanel.AddRow(taskControl);
         }
     }
 
+    private async void TaskControl_RegenerateOutputRequested(object? sender, PipeTaskTemplateUsage taskUsage)
+    {
+        ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
+
+        _pipeVariableValueMap.RemoveOutputValue(taskUsage);
+
+        ClearMissingOutputControls();
+
+        await FillMissingOutputsAsync();
+    }
+
     private async void RunButton_Click(object sender, EventArgs e)
     {
+        ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
+
+        _pipeVariableValueMap.ClearOutputValues();
+        ClearMissingOutputControls();
+
+        await FillMissingOutputsAsync();
+    }
+
+    private async Task FillMissingOutputsAsync()
+    {
+        _cancellationTokenSource?.Cancel();
+
+        var cancellationTokenSource = new CancellationTokenSource();
+        _cancellationTokenSource = cancellationTokenSource;
+
         SetAreControlsEnabled(false);
-
-        foreach (var control in _pipeRunnerTaskControls.Values)
-        {
-            control.Clear();
-        }
-
-        _cancellationTokenSource = new CancellationTokenSource();
 
         try
         {
@@ -110,7 +131,11 @@ public partial class PipeRunnerForm : Form
         { }
         finally
         {
-            SetAreControlsEnabled(true);
+            if (cancellationTokenSource == _cancellationTokenSource)
+            {
+                // Only set enabled if the cancellation is still our own.
+                SetAreControlsEnabled(true);
+            }
         }
     }
 
@@ -146,5 +171,22 @@ public partial class PipeRunnerForm : Form
     private void CancelButton_Click(object sender, EventArgs e)
     {
         _cancellationTokenSource?.Cancel();
+    }
+
+    private void ClearMissingOutputControls()
+    {
+        ArgumentNullException.ThrowIfNull(_pipeVariableValueMap);
+
+        foreach (var control in _pipeRunnerTaskControls.Values)
+        {
+            var controlTaskUsage = control.TaskTemplateUsage ?? throw new ArgumentNullException(nameof(control.TaskTemplateUsage));
+
+            bool isControlOutputDefined = _pipeVariableValueMap.Get(controlTaskUsage).HasOutput();
+
+            if (!isControlOutputDefined)
+            {
+                control.Clear();
+            }
+        }
     }
 }

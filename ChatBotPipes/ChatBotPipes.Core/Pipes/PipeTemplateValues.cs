@@ -20,7 +20,6 @@ public class PipeTemplateValues
         RemoveOutputValue(templateVariable.ReferencedTaskTemplate); // changing an input invalidates the output.
 
         taskValues.AddInputValue(templateVariable.ReferencedVariableName, value);
-
     }
 
     public void SetOutputValue(PipeTaskTemplateUsage taskTemplate, string value)
@@ -32,24 +31,38 @@ public class PipeTemplateValues
 
     public void RemoveOutputValue(PipeTaskTemplateUsage taskTemplate)
     {
+        RemoveValue(taskTemplate, TaskTemplateValues.OutputKey);
+    }
+
+    private void RemoveValue(PipeTaskTemplateUsage taskTemplate, string valueName)
+    {
         var values = GetTaskValues(taskTemplate);
 
-        values.RemoveOutputValue();
+        values.RemoveValue(valueName);
 
         foreach (var otherTaskUsage in _mapping.Keys)
         {
-            bool referencesRemovedOutputValue = otherTaskUsage.InputVariableReferences.Values
-                .Any(ReferencesRemovedOutputValue);
+            var referencesToRemovedValue = otherTaskUsage.InputVariableReferences
+                .Where(ReferencesRemovedValue)
+                .ToList();
 
-            if (referencesRemovedOutputValue)
+            foreach (var (inputName, referenceToRemovedValue) in referencesToRemovedValue)
             {
-                RemoveOutputValue(otherTaskUsage);
+                RemoveValue(otherTaskUsage, inputName);
             }
         }
 
-        bool ReferencesRemovedOutputValue(PipeTaskTemplateVariableReference variableReference)
-            => variableReference.ReferencedVariableName == TaskTemplateValues.OutputKey
-            && variableReference.ReferencedTaskTemplate == taskTemplate;
+        bool ReferencesRemovedValue(KeyValuePair<string, PipeTaskTemplateVariableReference> variableReference)
+            => variableReference.Value.ReferencedTaskTemplate == taskTemplate
+            && variableReference.Value.ReferencedVariableName == valueName;
+    }
+
+    public void ClearOutputValues()
+    {
+        foreach (var taskUsage in _mapping.Keys)
+        {
+            RemoveOutputValue(taskUsage);
+        }
     }
 
     public TaskTemplateValues Get(PipeTaskTemplateUsage taskTemplate)

@@ -33,6 +33,7 @@ partial class PipeRunnerTaskOutputControl
         runButton = new Button();
         outputTextBox = new OutputTextBox();
         updateOutputTimer = new System.Windows.Forms.Timer(components);
+        regenerateButton = new Button();
         SuspendLayout();
         // 
         // taskTemplateNameLabel
@@ -47,9 +48,9 @@ partial class PipeRunnerTaskOutputControl
         // runButton
         // 
         runButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        runButton.Location = new Point(550, 34);
+        runButton.Location = new Point(535, 34);
         runButton.Name = "runButton";
-        runButton.Size = new Size(75, 40);
+        runButton.Size = new Size(90, 40);
         runButton.TabIndex = 2;
         runButton.Text = "Run only this task";
         runButton.UseVisualStyleBackColor = true;
@@ -60,7 +61,7 @@ partial class PipeRunnerTaskOutputControl
         outputTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         outputTextBox.Location = new Point(3, 34);
         outputTextBox.Name = "outputTextBox";
-        outputTextBox.Size = new Size(541, 402);
+        outputTextBox.Size = new Size(526, 402);
         outputTextBox.TabIndex = 3;
         // 
         // updateOutputTimer
@@ -68,14 +69,27 @@ partial class PipeRunnerTaskOutputControl
         updateOutputTimer.Interval = 16;
         updateOutputTimer.Tick += UpdateOutputTimer_Tick;
         // 
-        // PipeRunnerTaskControl
+        // regenerateButton
+        // 
+        regenerateButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        regenerateButton.Enabled = false;
+        regenerateButton.Location = new Point(535, 80);
+        regenerateButton.Name = "regenerateButton";
+        regenerateButton.Size = new Size(90, 42);
+        regenerateButton.TabIndex = 4;
+        regenerateButton.Text = "Regenerate response";
+        regenerateButton.UseVisualStyleBackColor = true;
+        regenerateButton.Click += RegenerateOutputButton_Click;
+        // 
+        // PipeRunnerTaskOutputControl
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
+        Controls.Add(regenerateButton);
         Controls.Add(outputTextBox);
         Controls.Add(runButton);
         Controls.Add(taskTemplateNameLabel);
-        Name = "PipeRunnerTaskControl";
+        Name = "PipeRunnerTaskOutputControl";
         Size = new Size(630, 439);
         ResumeLayout(false);
         PerformLayout();
@@ -87,4 +101,5 @@ partial class PipeRunnerTaskOutputControl
     private Button runButton;
     private OutputTextBox outputTextBox;
     private System.Windows.Forms.Timer updateOutputTimer;
+    private Button regenerateButton;
 }

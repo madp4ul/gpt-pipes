@@ -16,25 +16,25 @@ public partial class PipeRunnerVariableUserInputControl : UserControl
 {
     public event EventHandler<PipeInputChange>? UserInputChanged;
 
-    public PipeTaskTemplateVariableReference? UserInputName { get; private set; }
+    public PipeTaskTemplateVariableReference? ReferencedVariable { get; private set; }
 
     public PipeRunnerVariableUserInputControl()
     {
         InitializeComponent();
     }
 
-    public void SetUserInputName(PipeTaskTemplateVariableReference taskVariableName)
+    public void SetReferencedVariable(PipeTaskTemplateVariableReference taskVariableReference)
     {
-        UserInputName = taskVariableName;
+        ReferencedVariable = taskVariableReference;
 
-        userTaskInputControl.SetUserInputName($"{taskVariableName.ReferencedVariableName} for '{taskVariableName.ReferencedTaskTemplate.TaskTemplate.Name}':");
+        userTaskInputControl.SetUserInputName($"{taskVariableReference.ReferencedVariableName} for '{taskVariableReference.ReferencedTaskTemplate.TaskTemplate.Name}':");
     }
 
     private void UserTaskInputControl_UserInputChanged(object sender, UserTaskInputControl.InputChange e)
     {
-        ArgumentNullException.ThrowIfNull(UserInputName);
+        ArgumentNullException.ThrowIfNull(ReferencedVariable);
 
-        UserInputChanged?.Invoke(this, new PipeInputChange(UserInputName, e.UserInputValue));
+        UserInputChanged?.Invoke(this, new PipeInputChange(ReferencedVariable, e.UserInputValue));
     }
 
     public record PipeInputChange(PipeTaskTemplateVariableReference InputName, string UserInputValue);

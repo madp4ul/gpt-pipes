@@ -1,6 +1,7 @@
 ﻿namespace ChatBotPipes.WinformsApp.Controls;
 
 using ChatBotPipes.Client;
+using ChatBotPipes.Core.Pipes;
 using ChatBotPipes.Core.TaskTemplates;
 using ChatBotPipes.WinformsApp.Forms;
 using System;
@@ -20,32 +21,34 @@ public partial class PipeRunnerTaskOutputControl : UserControl
 {
     private StringBuilder _outputStringBuilder = new();
 
-    public TaskTemplate? TaskTemplate { get; private set; }
+    public event EventHandler<PipeTaskTemplateUsage>? RegenerateOutputRequested;
+
+    public PipeTaskTemplateUsage? TaskTemplateUsage { get; private set; }
 
     public PipeRunnerTaskOutputControl()
     {
         InitializeComponent();
     }
 
-    public void SetTaskTemplate(TaskTemplate taskTemplate)
+    public void SetTaskTemplate(PipeTaskTemplateUsage taskTemplateUsage)
     {
-        TaskTemplate = taskTemplate;
+        TaskTemplateUsage = taskTemplateUsage;
 
-        taskTemplateNameLabel.Text = taskTemplate.Name;
+        taskTemplateNameLabel.Text = taskTemplateUsage.TaskTemplate.Name;
     }
 
     public async Task UpdateFromChatbotResponseAsync(IChatBotResponse chatBotResponse)
     {
         Clear();
 
-        outputTextBox.Text = chatBotResponse.GetCurrentResponse();
+        SetOutputText(chatBotResponse.GetCurrentResponse());
 
         chatBotResponse.DataReceived += ChatBotResponse_DataReceived;
         updateOutputTimer.Start();
 
         try
         {
-            outputTextBox.Text = await chatBotResponse.AwaitCompletionAsync();
+            SetOutputText(await chatBotResponse.AwaitCompletionAsync());
         }
         catch (OperationCanceledException)
         { }
@@ -59,7 +62,7 @@ public partial class PipeRunnerTaskOutputControl : UserControl
     public void Clear()
     {
         _outputStringBuilder.Clear();
-        outputTextBox.Text = "";
+        SetOutputText("");
     }
 
     private void ChatBotResponse_DataReceived(string additonalText)
@@ -69,11 +72,11 @@ public partial class PipeRunnerTaskOutputControl : UserControl
 
     private void RunButton_Click(object sender, EventArgs e)
     {
-        ArgumentNullException.ThrowIfNull(TaskTemplate);
+        ArgumentNullException.ThrowIfNull(TaskTemplateUsage);
 
         var runnerForm = new TaskRunnerForm();
 
-        runnerForm.SetTaskTemplate(TaskTemplate);
+        runnerForm.SetTaskTemplate(TaskTemplateUsage.TaskTemplate);
 
         runnerForm.ShowDialog();
     }
@@ -83,6 +86,20 @@ public partial class PipeRunnerTaskOutputControl : UserControl
 
     private void UpdateOutputTimer_Tick(object sender, EventArgs e)
     {
-        outputTextBox.Text = _outputStringBuilder.ToString();
+        SetOutputText(_outputStringBuilder.ToString());
+    }
+
+    private void SetOutputText(string text)
+    {
+        outputTextBox.Text = text;
+
+        regenerateButton.Enabled = !string.IsNullOrEmpty(text);
+    }
+
+    private void RegenerateOutputButton_Click(object sender, EventArgs e)
+    {
+        ArgumentNullException.ThrowIfNull(TaskTemplateUsage);
+
+        RegenerateOutputRequested?.Invoke(this, TaskTemplateUsage);
     }
 }
