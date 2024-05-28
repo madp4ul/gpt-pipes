@@ -21,6 +21,8 @@ public static class ServiceCollectionExtensions
 
         provider.RegisterChatBotFactory("GPT-3.5", () => CreateChatBotWithModel(host.Services, Model.ChatGPTTurbo));
         provider.RegisterChatBotFactory("GPT-4", () => CreateChatBotWithModel(host.Services, Model.GPT4));
+        provider.RegisterChatBotFactory("GPT-4o", () => CreateChatBotWithModel(host.Services,
+            new Model { ModelID = "GPT-4o" }));
 
         return host;
     }
